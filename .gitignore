@@ -25,3 +25,7 @@
 # VIM Files #
 #############
 *.swp
+
+# BUILD_DIR #
+#############
+build/*
