@@ -1,41 +1,25 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (util.h) is part of CairoPlot.
+ * This file (util.h) is part of C-CairoPlot.
  * 
- * CairoPlot is free software: you can redistribute it and/or modify it under
+ * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  * 
- * CairoPlot is distributed in the hope that it will be useful, but WITHOUT ANY
+ * C-CairoPlot is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * CairoPlot. If not, see http://www.gnu.org/licenses/.
+ * C-CairoPlot. If not, see http://www.gnu.org/licenses/.
  *
  */
 
 #ifndef _CP_UTIL_H_
 #define _CP_UTIL_H_
-
-typedef enum CP_OBJ_TYPE
-{
-	CP_LIST_TYPE,
-	CP_CIRCULAR_LIST_TYPE,
-	CP_NODE_TYPE,
-	CP_DATA_TYPE,
-	CP_SERIE_TYPE,
-	CP_COLOR_TYPE,
-} CP_ObjectType;
-
-typedef enum CP_FILE_TYPE
-{
-	CP_SVG,
-	CP_PNG,
-} CP_FileType;
 
 typedef enum BOOL
 {
@@ -43,6 +27,14 @@ typedef enum BOOL
 	true = 1
 } bool;
 
-char* CP_addFileExtension(char *filename, CP_FileType ft);
+typedef enum CP_FILE_TYPE
+{
+	CP_SVG,
+	CP_PNG,
+} CP_FileType;
+
+void cp_addFileExtension(char **ppRetFilename, char *filename, CP_FileType ft);
+
+#define cp_new(n, type) (type*)calloc(n, sizeof(type))
 
 #endif // _CP_UTIL_H_

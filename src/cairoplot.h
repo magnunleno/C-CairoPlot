@@ -1,5 +1,5 @@
 /*
- * CairoPlot - A plotting library based on Cairo
+ * C-CairoPlot - A plotting library based on Cairo
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
  * This program is free software: you can redistribute it and/or modify it

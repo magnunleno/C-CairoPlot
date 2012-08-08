@@ -1,55 +1,48 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (util_test.c) is part of CairoPlot.
+ * This file (util_test.c) is part of C-CairoPlot.
  * 
- * CairoPlot is free software: you can redistribute it and/or modify it under
+ * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
  * 
- * CairoPlot is distributed in the hope that it will be useful, but WITHOUT ANY
+ * C-CairoPlot is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
  * 
  * You should have received a copy of the GNU General Public License along with
- * CairoPlot. If not, see http://www.gnu.org/licenses/.
+ * C-CairoPlot. If not, see http://www.gnu.org/licenses/.
  *
  */
 
 #include <check.h>
 #include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
 
 #include "cairoplot.h"
+#include "test_context.h"
 #include "util_test.h"
 
 START_TEST(test_file_extention)
 {
 	char *fname1 = "testname";
 	char *fname2 = "/test/path/testname";
-	char *filename;
+	char *filename = NULL;
 
-	filename = (char*)CP_addFileExtension(fname1, CP_SVG);
-	fail_unless(strcmp(filename, "testname.svg") == 0,
-			"extension added incorrectly. Received:%s", filename);
-	free(filename);
+	cp_addFileExtension(&filename, fname1, CP_SVG);
+	check_equal_s(filename, "testname.svg", "Extension added incorrectly. Expected '%s', received '%s'");
 
-	filename = (char*)CP_addFileExtension(fname1, CP_PNG);
-	fail_unless(strcmp(filename, "testname.png") == 0,
-			"extension added incorrectly. Received:%s", filename);
-	free(filename);
+	cp_addFileExtension(&filename, fname1, CP_PNG);
+	check_equal_s(filename, "testname.png", "Extension added incorrectly. Expected '%s', received '%s'");
 
-	filename = (char*)CP_addFileExtension(fname2, CP_SVG);
-	fail_unless(strcmp(filename, "/test/path/testname.svg") == 0,
-			"extension added incorrectly. Received:%s", filename);
-	free(filename);
+	cp_addFileExtension(&filename, fname2, CP_SVG);
+	check_equal_s(filename, "/test/path/testname.svg", "Extension added incorrectly. Expected '%s', received '%s'");
 
-	filename = (char*)CP_addFileExtension(fname2, CP_PNG);
-	fail_unless(strcmp(filename, "/test/path/testname.png") == 0,
-			"extension added incorrectly. Received:%s", filename);
-	free(filename);
+	cp_addFileExtension(&filename, fname2, CP_PNG);
+	check_equal_s(filename, "/test/path/testname.png", "Extension added incorrectly. Expected '%s', received '%s'");
 }END_TEST
 
 Suite* util_suite(void)
