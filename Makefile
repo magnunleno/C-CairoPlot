@@ -52,23 +52,23 @@ OBJ_COMPILE=$(CC) -c -fPIC $(CFLAGS) src/$(notdir $(@:.o=.c)) -o $@
 
 all: $(OBJECTS) build/libcairoplot.so build/libcairoplot.a
 	@echo
-	@echo -e "$(YELLOW)»»» Building all: $(CLR_END)$(ALL_COMPILE)"
+	@echo "$(YELLOW)»»» Building all: $(CLR_END)$(ALL_COMPILE)"
 
 check: build/libcairoplot.so build/libcairoplot.a $(TESTS)
-	@echo -e "$(YELLOW)»»» Building all tests: $(CLR_END)$(ALLTEST_COMPILE)"
+	@echo "$(YELLOW)»»» Building all tests: $(CLR_END)$(ALLTEST_COMPILE)"
 	@$(ALLTEST_COMPILE)
 	@chmod	770 build/$(TESTS_DIR)/test_all.run
 	@echo
-	@echo -e "$(YELLOW)»»» Running tests: $(CLR_END)$(ALL_COMPILE)"
+	@echo "$(YELLOW)»»» Running tests: $(CLR_END)$(ALL_COMPILE)"
 	@LD_LIBRARY_PATH=./build ./build/$(TESTS_DIR)/test_all.run
 
 build/libcairoplot.so: $(OBJECTS)
-	@echo -e "$(YELLOW)»»» Creating shared libraries: $(CLR_END)"
+	@echo "$(YELLOW)»»» Creating shared libraries: $(CLR_END)"
 	@gcc -shared -fPIC -Wl,-soname,libcairoplot.so $(OBJECTS) $(CFLAGS) -o build/libcairoplot.so.1.0.1 $(LIBS)
 	@cd build && ln -s libcairoplot.so.1.0.1 libcairoplot.so
 
 build/libcairoplot.a: $(OBJECTS)
-	@echo -e "$(YELLOW)»»» Creating static libraries: $(CLR_END)"
+	@echo "$(YELLOW)»»» Creating static libraries: $(CLR_END)"
 	@ar rcs build/libcairoplot.a $(OBJECTS)
 
 $(BUILD_DIR):
@@ -77,7 +77,7 @@ $(BUILD_DIR):
 
 clean:
 	@rm -rf build
-	@echo -e "$(GREEN)Exit, left stage...$(CLR_END)"
+	@echo "$(GREEN)Exit, left stage...$(CLR_END)"
 	@echo
 
 ####### Prerequisites
@@ -86,9 +86,9 @@ $(BUILD_DIR)/virtual_list.o: virtual_list.h
 
 ####### Build
 $(BUILD_DIR)/$(TESTS_DIR)/%.test: %_test.c
-	@echo -e "$(YELLOW)»»» Building tests $@: $(CLR_END)$(TEST_COMPILE)"
+	@echo "$(YELLOW)»»» Building tests $@: $(CLR_END)$(TEST_COMPILE)"
 	@$(TEST_COMPILE)
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
-	@echo -e "$(YELLOW)»»» $@:$(CLR_END) $(OBJ_COMPILE)"
+	@echo "$(YELLOW)»»» $@:$(CLR_END) $(OBJ_COMPILE)"
 	@$(OBJ_COMPILE)
