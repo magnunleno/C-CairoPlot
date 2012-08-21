@@ -6,6 +6,17 @@ in C.
 
 **Attention:** This project is in very early development stage
 
+
+Contributting
+-------------
+
+If you want to contribute just fork the repositorie, make youre changes and send me a fork request.
+
+Needed libraries/dependencies:
+ * libcairo2-dev
+ * libglib2.0-dev
+ * check
+
 What is/was CairoPlot
 -----------------
 
