@@ -48,7 +48,6 @@ void *dummyDestroyer(void *content)
 	int num;
 	num = (int)content;
 	GLOBAL_N += num;
-	printf("GLOBAL %i\n", GLOBAL_N);
 	return NULL;
 }
 
@@ -104,11 +103,7 @@ START_TEST(test_list_initialization)
 
 	GLOBAL_N = 0;
 	deleteList(&list);
-	//check_equal_n(GLOBAL_N, 35, "Erro while freeing. Found %i, expected %i");
-	if (list == NULL)
-		printf("is null\n");
-	else
-		printf("wasn't null\n");
+	check_equal_n(GLOBAL_N, 35, "Erro while freeing. Found %i, expected %i");
 	check_equal_null(list);
 }END_TEST
 
