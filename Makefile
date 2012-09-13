@@ -36,8 +36,8 @@ CFLAGS=`pkg-config --cflags $(libdeps)`
 LIBS=`pkg-config --libs $(libdeps)`
 FLAGS=-Wall -I./src -L./build
 
-ALL=util virtual_list
-TESTS=util.test virtual_list.test main.test
+ALL=util color
+TESTS=util.test color.test main.test
 BUILD_DIR=build
 TESTS_DIR=tests
 TESTS:=$(addprefix $(BUILD_DIR)/$(TESTS_DIR)/,$(TESTS))
@@ -65,7 +65,9 @@ check: build/libcairoplot.so build/libcairoplot.a $(TESTS)
 build/libcairoplot.so: $(OBJECTS)
 	@echo "$(YELLOW)»»» Creating shared libraries: $(CLR_END)"
 	@gcc -shared -fPIC -Wl,-soname,libcairoplot.so $(OBJECTS) $(CFLAGS) -o build/libcairoplot.so.1.0.1 $(LIBS)
-	@cd build && ln -s libcairoplot.so.1.0.1 libcairoplot.so
+	@if ! test -L build/libcairoplot.so; then \
+		cd build && ln -s libcairoplot.so.1.0.1 libcairoplot.so; \
+	fi
 
 build/libcairoplot.a: $(OBJECTS)
 	@echo "$(YELLOW)»»» Creating static libraries: $(CLR_END)"
@@ -82,7 +84,7 @@ clean:
 
 ####### Prerequisites
 $(BUILD_DIR)/util.o: util.h
-$(BUILD_DIR)/virtual_list.o: virtual_list.h
+$(BUILD_DIR)/color.o: color.h util.o
 
 ####### Build
 $(BUILD_DIR)/$(TESTS_DIR)/%.test: %_test.c
