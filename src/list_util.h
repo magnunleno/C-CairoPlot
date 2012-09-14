@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (virtual_list.h) is part of C-CairoPlot.
+ * This file (list_util.h) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -20,25 +20,20 @@
 
 #include "util.h"
 
-#ifndef _CP_VIRTUAL_LIST_H
-#define _CP_VIRTUAL_LIST_H
+#ifndef _CP_LIST_UTIL_H
+#define _CP_LIST_UTIL_H
 
-typedef struct CP_NODE
-{
-	void *content;
-	struct CP_NODE *next;
-	void *(*destroyer)(void *);
-} CP_Node;
-
-CP_Node* _cp_newNode(void *content, void *(*destroyFunc)(void*));
-CP_Node* cp_destroyNode(CP_Node **node);
-
-#define cp_newNode(content, destroyer) _cp_newNode((void*)content, destroyer)
-#define CP_LIST_HEADER		\
-	CP_Node *first;			\
-	CP_Node *last;			\
-	CP_Node *iter;			\
+#define CP_BASELIST(_ListType)	\
+	_ListType *first;			\
+	_ListType *last;			\
+	_ListType *iter;			\
 	int size
+
+#define CP_INIT_LIST(list)		\
+	list->first = NULL;			\
+	list->last = NULL;			\
+	list->iter = NULL;			\
+	list->size = 0
 
 #define cp_appendNode(list, node) 					\
 	if (list->size == 0)							\
@@ -48,16 +43,9 @@ CP_Node* cp_destroyNode(CP_Node **node);
 	list->last = node; 								\
 	list->size++
 
-#define cp_startIter(list) list->iter = list->first;
-
-#define cp_clearListContents(list)							\
-	cp_startIter(list)										\
-	while (list->iter)										\
-		list->iter = cp_destroyNode(&(list->iter));			\
-	list->first = list->last = list->iter = NULL
-
-#define cp_iterNext(list) list->iter = list->iter->next;
+#define cp_startIter(list) list->iter = list->first
+#define cp_iterNext(list) list->iter = list->iter->next
 #define cp_iterNextCircular(list) list->iter = list->iter->next == NULL?list->first:list->iter->next
 #define cp_iterUnpack(list, type) (type)(list->iter->content)
 
-#endif // _CP_VIRTUAL_LIST_H
+#endif // _CP_LIST_UTIL_H

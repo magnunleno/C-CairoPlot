@@ -48,7 +48,7 @@ TEST_COMPILE=$(CC) -c $(TESTS_DIR)/$(addsuffix _test, $*).c $(FLAGS) $(CFLAGS) -
 ALLTEST_COMPILE=$(CC) $(TESTS) $(FLAGS) $(CFLAGS) -lcairoplot -o $(BUILD_DIR)/$(TESTS_DIR)/test_all.run $(LIBS)
 OBJ_COMPILE=$(CC) -c -fPIC $(CFLAGS) src/$(notdir $(@:.o=.c)) -o $@
 
-.PHONY: all clean build_static_libs check
+.PHONY: all clean build_static_libs check test_mem_leak
 
 all: $(OBJECTS) build/libcairoplot.so build/libcairoplot.a
 	@echo
@@ -77,6 +77,13 @@ $(BUILD_DIR):
 	@mkdir $(BUILD_DIR)
 	@mkdir $(BUILD_DIR)/$(TESTS_DIR)
 
+test_mem_leak: check
+	@echo "$(YELLOW)»»» Building all tests: $(CLR_END)$(ALLTEST_COMPILE)"
+	@$(CC) $(TESTS_DIR)/test_mem_leak.c $(FLAGS) -lcairoplot $(CFLAGS) -o build/tests/test_mem_leak.run
+	chmod	770 build/$(TESTS_DIR)/test_mem_leak.run
+	@LD_LIBRARY_PATH=./build ./build/$(TESTS_DIR)/test_mem_leak.run
+	@LD_LIBRARY_PATH=./build valgrind --leak-check=full ./build/$(TESTS_DIR)/test_mem_leak.run
+
 clean:
 	@rm -rf build
 	@echo "$(GREEN)Exit, left stage...$(CLR_END)"
@@ -84,7 +91,7 @@ clean:
 
 ####### Prerequisites
 $(BUILD_DIR)/util.o: util.h
-$(BUILD_DIR)/color.o: color.h util.o
+$(BUILD_DIR)/color.o: color.h
 
 ####### Build
 $(BUILD_DIR)/$(TESTS_DIR)/%.test: %_test.c

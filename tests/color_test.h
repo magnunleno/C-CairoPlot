@@ -1,39 +1,26 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
- *
- * This file (main_test.c) is part of C-CairoPlot.
- *
+ * 
+ * This file (color_test.h) is part of C-CairoPlot.
+ * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
  * Software Foundation, either version 3 of the License, or (at your option)
  * any later version.
- *
+ * 
  * C-CairoPlot is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- *
+ * 
  * You should have received a copy of the GNU General Public License along with
  * C-CairoPlot. If not, see http://www.gnu.org/licenses/.
  *
  */
 
-#include <stdio.h>
-#include <glib.h>
-#include <check.h>
+#ifndef _CP_COLOR_TEST_H_
+#define _CP_COLOR_TEST_H_
 
-#include "util_test.h"
-#include "color_test.h"
+Suite* color_suite(void);
 
-int main(void){
-	int number_failed;
-
-	SRunner *sr;
-	sr = srunner_create(util_suite());
-	srunner_add_suite(sr, color_suite());
-	srunner_run_all(sr, CK_NORMAL);
-
-	number_failed = srunner_ntests_failed (sr);
-	srunner_free(sr);
-	return (number_failed == 0)?0:1;
-}
+#endif // _CP_COLOR_TEST_H_

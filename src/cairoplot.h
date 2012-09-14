@@ -17,4 +17,10 @@
  *
  */
 
+#ifndef _CAIROPLOT_H
+#define _CAIROPLOT_H
+
 #include "util.h"
+#include "color.h"
+
+#endif // _CAIROPLOT_H
