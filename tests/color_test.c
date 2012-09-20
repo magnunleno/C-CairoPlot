@@ -18,12 +18,6 @@
  *
  */
 
-#include <check.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "cairoplot.h"
-#include "test_context.h"
 #include "color_test.h"
 
 START_TEST(test_color_creation)
@@ -33,19 +27,17 @@ START_TEST(test_color_creation)
 	check_equal_n(color->green, 0.11, "Found '%f' as green, expected '%f'");
 	check_equal_n(color->blue, 0.12, "Found '%f' as blue, expected '%f'");
 	check_equal_n(color->alpha, 0.13, "Found '%f' as alpha, expected '%f'");
+	free(color);
 }END_TEST
 
 START_TEST(test_colorlist_creation)
 {
-	CP_Color *color1 = cp_newColor(0.1, 0.2, 0.3, 0.4);
-	CP_Color *color2 = cp_newColor(0.2, 0.3, 0.4, 0.5);
-	CP_Color *color3 = cp_newColor(0.3, 0.4, 0.5, 0.6);
+	CP_List *colorList = cp_newList();
+	cp_appendNode(colorList, cp_newColor(0.1, 0.2, 0.3, 0.4));
+	cp_appendNode(colorList, cp_newColor(0.2, 0.3, 0.4, 0.5));
+	cp_appendNode(colorList, cp_newColor(0.3, 0.4, 0.5, 0.6));
 
-	CP_ColorList *colorList = cp_newColorList();
-	cp_appendNode(colorList, color1);
-	cp_appendNode(colorList, color2);
-	cp_appendNode(colorList, color3);
-
+	check_equal_n(3, colorList->size, "Found %i as size list, expected %i.")
 	int n = 0;
 	double values[3][4] = {
 		{0.1, 0.2, 0.3, 0.4},
@@ -56,37 +48,18 @@ START_TEST(test_colorlist_creation)
 	for (cp_startIter(colorList); colorList->iter; cp_iterNext(colorList))
 	{
 		value = values[n];
-		check_equal_n(value[0], colorList->iter->red, "Found '%f' as red, expected '%f'");
-		check_equal_n(value[1], colorList->iter->green, "Found '%f' as green, expected '%f'");
-		check_equal_n(value[2], colorList->iter->blue, "Found '%f' as blue, expected '%f'");
-		check_equal_n(value[3], colorList->iter->alpha, "Found '%f' as alpha, expected '%f'");
+		check_equal_n(value[0], ((CP_Color*)colorList->iter)->red, 
+				"Found '%f' as red, expected '%f'");
+		check_equal_n(value[1], ((CP_Color*)colorList->iter)->green,
+				"Found '%f' as green, expected '%f'");
+		check_equal_n(value[2], ((CP_Color*)colorList->iter)->blue,
+				"Found '%f' as blue, expected '%f'");
+		check_equal_n(value[3], ((CP_Color*)colorList->iter)->alpha,
+				"Found '%f' as alpha, expected '%f'");
 		n++;
 	}
 
-}END_TEST
-
-START_TEST(test_colorlist_cleanup)
-{
-	CP_Color *color1 = cp_newColor(0.1, 0.2, 0.3, 0.4);
-	CP_Color *color2 = cp_newColor(0.2, 0.3, 0.4, 0.5);
-	CP_Color *color3 = cp_newColor(0.3, 0.4, 0.5, 0.6);
-
-	CP_ColorList *colorList = cp_newColorList();
-	cp_appendNode(colorList, color1);
-	cp_appendNode(colorList, color2);
-	cp_appendNode(colorList, color3);
-
-	check_equal_n(3, colorList->size, "Found '%i' as list size, expected '%i'");
-	cp_emptyColorList(colorList);
-	check_equal_n(0, colorList->size, "Found '%i' as list size, expected '%i'");
-
-	int n = 0;
-	for (cp_startIter(colorList); colorList->iter; cp_iterNext(colorList))
-	{
-		n++;
-	}
-	check_equal_n(0, colorList->size, "Found '%i' as list items count, expected '%i'");
-	cp_deleteColorList(colorList);
+	cp_deleteList(colorList, &_cp_deleteColor);
 	check_equal_null(colorList);
 
 }END_TEST
@@ -97,8 +70,8 @@ Suite* color_suite(void)
 
 	TCase *tc_core = tcase_create("Color testcase");
 	tcase_add_test(tc_core, test_color_creation);
-	tcase_add_test(tc_core, test_colorlist_creation);
-	tcase_add_test(tc_core, test_colorlist_cleanup);
+	//tcase_add_test(tc_core, test_colorlist_creation);
+	//tcase_add_test(tc_core, test_colorlist_cleanup);
 
 	suite_add_tcase(s, tc_core);
 	return s;

@@ -20,7 +20,6 @@
 
 #include "example_test.h"
 
-
 START_TEST(test_example){
 	fail_unless(0 == 0, "Erro message");
 }END_TEST

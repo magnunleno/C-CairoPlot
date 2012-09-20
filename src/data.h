@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (virtual_list_test.h) is part of C-CairoPlot.
+ * This file (color.h) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -18,9 +18,29 @@
  *
  */
 
-#ifndef _CP_VIRTUAL_LIST_TEST_H_
-#define _CP_VIRTUAL_LIST_TEST_H_
+#include "util.h"
+#include "list.h"
 
-Suite* vlist_suite(void);
+#ifndef _CP_DATA_H_
+#define _CP_DATA_H_
 
-#endif // _CP_VIRTUAL_LIST_TEST_H_
+typedef struct CP_DATA
+{
+	char *label;
+	double x;
+	double y;
+	double z;
+	double param_x;
+	double param_y;
+	double param_z;
+	struct CP_DATA *next;
+} CP_Data;
+
+CP_Data *cp_newData(char *label, double x, double y, double z);
+#define cp_newData1d(label, x) cp_newData(label, x, 0.0, 0.0)
+#define cp_newData2d(label, x, y) cp_newData(label, x, y, 0.0)
+#define cp_newData3d(label, x, y, z) cp_newData(label, x, y, z)
+
+void _cp_deleteData(void *content);
+
+#endif // _CP_DATA_H_

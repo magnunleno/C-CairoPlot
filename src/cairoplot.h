@@ -21,6 +21,8 @@
 #define _CAIROPLOT_H
 
 #include "util.h"
+#include "list.h"
 #include "color.h"
+#include "data.h"
 
 #endif // _CAIROPLOT_H

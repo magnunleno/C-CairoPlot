@@ -20,32 +20,44 @@
 
 #include "util.h"
 
-#ifndef _CP_LIST_UTIL_H
-#define _CP_LIST_UTIL_H
+#ifndef _CP_LIST_H
+#define _CP_LIST_H
 
-#define CP_BASELIST(_ListType)	\
-	_ListType *first;			\
-	_ListType *last;			\
-	_ListType *iter;			\
-	int size
+typedef struct CP_LIST_NODE
+{
+	struct CP_LIST_NODE *next;
+	struct CP_LIST_NODE *previous;
+	void* content;
+} CP_ListNode;
 
-#define CP_INIT_LIST(list)		\
-	list->first = NULL;			\
-	list->last = NULL;			\
-	list->iter = NULL;			\
-	list->size = 0
+typedef struct CP_LIST
+{
+	CP_ListNode *first;
+	CP_ListNode *last;
+	CP_ListNode *iter;
+	int size;
+	struct CP_COLOR *next;
+} CP_List;
 
-#define cp_appendNode(list, node) 					\
-	if (list->size == 0)							\
-		list->first = node;							\
-	else 											\
-		list->last->next = node;					\
-	list->last = node; 								\
-	list->size++
+CP_List *cp_newList();
+
+void __cp_appendNode(CP_List *list, void* node);
+#define cp_appendNode(list, node) __cp_appendNode(list, (void*)node)
 
 #define cp_startIter(list) list->iter = list->first
+
 #define cp_iterNext(list) list->iter = list->iter->next
 #define cp_iterNextCircular(list) list->iter = list->iter->next == NULL?list->first:list->iter->next
+#define cp_nodeUnpack(node, type) (type)(node->content)
 #define cp_iterUnpack(list, type) (type)(list->iter->content)
 
-#endif // _CP_LIST_UTIL_H
+void cp_emptyList(CP_List *list, void (*deleteNodeFunc)(void *));
+
+#define cp_deleteList(list, deleteFunc)			\
+	if (list != NULL && list->first != NULL)	\
+		cp_emptyList(list, deleteFunc);			\
+	free(list);									\
+	list = NULL
+
+
+#endif // _CP_LIST_H

@@ -19,7 +19,7 @@
  */
 
 #include "util.h"
-#include "list_util.h"
+#include "list.h"
 
 #ifndef _CP_COLOR_H
 #define _CP_COLOR_H
@@ -30,22 +30,10 @@ typedef struct CP_COLOR
 	double green;
 	double blue;
 	double alpha;
-	struct CP_COLOR *next;
 } CP_Color;
 
-typedef struct CP_COLOR_LIST
-{
-	CP_BASELIST(CP_Color);
-} CP_ColorList;
-
 CP_Color *cp_newColor(double red, double green, double blue, double alpha);
-#define cp_appendColor(list, red, green, blue, alpha) cp_appendNode(list, cp_newColor(red, green, blue, alpha))
+#define cp_appendColor(list, red, green, blue, alpha) cp_appendNode(list, CP_Color(red, green, blue, alpha))
 
-CP_ColorList *cp_newColorList();
-void cp_emptyColorList(CP_ColorList *list);
-#define cp_deleteColor(color) free(color)
-#define cp_deleteColorList(colotList) \
-	free(colorList);\
-	colorList = NULL
-
+void _cp_deleteColor(void *content);
 #endif // _CP_COLOR_H

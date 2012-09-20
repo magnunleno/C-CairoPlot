@@ -18,12 +18,6 @@
  *
  */
 
-#include <check.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "cairoplot.h"
-#include "test_context.h"
 #include "util_test.h"
 
 START_TEST(test_file_extention)

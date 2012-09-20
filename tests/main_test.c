@@ -23,14 +23,18 @@
 #include <check.h>
 
 #include "util_test.h"
+#include "list_test.h"
 #include "color_test.h"
+#include "data_test.h"
 
 int main(void){
 	int number_failed;
 
 	SRunner *sr;
 	sr = srunner_create(util_suite());
+	srunner_add_suite(sr, list_suite());
 	srunner_add_suite(sr, color_suite());
+	srunner_add_suite(sr, data_suite());
 	srunner_run_all(sr, CK_NORMAL);
 
 	number_failed = srunner_ntests_failed (sr);

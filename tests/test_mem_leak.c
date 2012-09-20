@@ -23,28 +23,78 @@
 
 #include "cairoplot.h"
 
-void test_colors()
+typedef struct TEST_DATA
 {
-	CP_Color *color1 = cp_newColor(0.1, 0.2, 0.3, 0.4);
-	CP_Color *color2 = cp_newColor(0.2, 0.3, 0.4, 0.5);
-	CP_Color *color3 = cp_newColor(0.3, 0.4, 0.5, 0.6);
+	int value;
+} TestData;
 
-	CP_ColorList *colorList = cp_newColorList();
-	cp_appendNode(colorList, color1);
-	cp_appendNode(colorList, color2);
-	cp_appendNode(colorList, color3);
-
-	cp_emptyColorList(colorList);
-
-	int n = 0;
-	for (cp_startIter(colorList); colorList->iter; cp_iterNext(colorList))
-	{
-		n++;
-	}
-	cp_deleteColorList(colorList);
+void deleteTestData(void *content)
+{
+	TestData *data = (TestData *)content;
+	printf("Data delete %i\n", data->value);
+	free(data);
 }
+
+void dummyDelete(void *content)
+{
+	printf("Dummy delete %i\n", (int)content);
+}
+
+TestData *newData(int value)
+{
+	TestData *data = cp_new(1, TestData);
+	data->value = value;
+	return data;
+}
+
+void test_data_list()
+{
+	CP_List *list = cp_newList();
+	TestData *data = NULL;
+
+	data = cp_new(1, TestData);
+	data->value = 12;
+	cp_appendNode(list, data); 
+
+	cp_appendNode(list, newData(13));
+
+	data = cp_new(1, TestData);
+	data->value = 14;
+	cp_appendNode(list, data);
+
+	printf("Size of list %i\n", list->size);
+	cp_deleteList(list, &deleteTestData);
+}
+
+void test_int_list()
+{
+	CP_List *list = cp_newList();
+
+	cp_appendNode(list, 10);
+	cp_appendNode(list, 11);
+	cp_appendNode(list, 12);
+
+	printf("Size of list %i\n", list->size);
+	cp_emptyList(list, &dummyDelete);
+
+	free(list);
+}
+
+void test_color_list()
+{
+	CP_List *colorList = cp_newList();
+	cp_appendNode(colorList, cp_newColor(0.1, 0.2, 0.3, 0.4));
+	cp_appendNode(colorList, cp_newColor(0.2, 0.3, 0.4, 0.5));
+	cp_appendNode(colorList, cp_newColor(0.3, 0.4, 0.5, 0.6));
+
+	cp_deleteList(colorList, _cp_deleteColor);
+	printf("Done with color list\n");
+}
+
 int main(int argc, char const *argv[])
 {
-	test_colors();
+	test_int_list();
+	test_data_list();
+	test_color_list();
 	return 0;
 }

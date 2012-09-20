@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "color.h"
+#include "cairoplot.h"
 
 CP_Color *cp_newColor(double red, double green, double blue, double alpha)
 {
@@ -33,27 +33,7 @@ CP_Color *cp_newColor(double red, double green, double blue, double alpha)
 	return color;
 }
 
-CP_ColorList *cp_newColorList()
+void _cp_deleteColor(void *content)
 {
-	CP_ColorList *list = cp_new(1, CP_ColorList);
-	CP_INIT_LIST(list);
-	return list;
-}
-
-void cp_emptyColorList(CP_ColorList *list)
-{
-	CP_Color *current = NULL;
-	cp_startIter(list);
-	while (list->iter)
-	{
-		current = list->iter;
-		list->iter = current->next;
-		if(current == list->last)
-			list->last = NULL;
-		list->first = list->iter;
-		cp_deleteColor(current);
-		list->size--;
-	}
-	list->first = NULL;
-	list->iter = NULL;
+	free((CP_Color *)content);
 }

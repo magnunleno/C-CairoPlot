@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (list_util.c) is part of C-CairoPlot.
+ * This file (color.c) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -20,5 +20,24 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "list_util.h"
+#include "data.h"
 
+CP_Data *cp_newData(char *label, double x, double y, double z)
+{
+	CP_Data *data = cp_new(1, CP_Data);
+	data->x = x;
+	data->y = y;
+	data->z = z;
+
+	data->param_x = 0.0;
+	data->param_y = 0.0;
+	data->param_z = 0.0;
+
+	data->label = label;
+	return data;
+}
+
+void _cp_deleteData(void *content)
+{
+	free((CP_Data *)content);
+}

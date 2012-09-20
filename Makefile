@@ -36,8 +36,8 @@ CFLAGS=`pkg-config --cflags $(libdeps)`
 LIBS=`pkg-config --libs $(libdeps)`
 FLAGS=-Wall -I./src -L./build
 
-ALL=util color
-TESTS=util.test color.test main.test
+ALL=util list color data
+TESTS=util.test list.test color.test data.test main.test
 BUILD_DIR=build
 TESTS_DIR=tests
 TESTS:=$(addprefix $(BUILD_DIR)/$(TESTS_DIR)/,$(TESTS))
@@ -77,7 +77,7 @@ $(BUILD_DIR):
 	@mkdir $(BUILD_DIR)
 	@mkdir $(BUILD_DIR)/$(TESTS_DIR)
 
-test_mem_leak: check
+test_mem_leak: build/libcairoplot.so build/libcairoplot.a $(TESTS)
 	@echo "$(YELLOW)»»» Building all tests: $(CLR_END)$(ALLTEST_COMPILE)"
 	@$(CC) $(TESTS_DIR)/test_mem_leak.c $(FLAGS) -lcairoplot $(CFLAGS) -o build/tests/test_mem_leak.run
 	chmod	770 build/$(TESTS_DIR)/test_mem_leak.run
@@ -90,8 +90,10 @@ clean:
 	@echo
 
 ####### Prerequisites
-$(BUILD_DIR)/util.o: util.h
-$(BUILD_DIR)/color.o: color.h
+$(BUILD_DIR)/data.o: data.h data.c
+$(BUILD_DIR)/color.o: color.h color.c
+$(BUILD_DIR)/data.o: data.h data.c
+$(BUILD_DIR)/list.o: list.h list.c
 
 ####### Build
 $(BUILD_DIR)/$(TESTS_DIR)/%.test: %_test.c

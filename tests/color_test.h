@@ -18,6 +18,10 @@
  *
  */
 
+#include <check.h>
+#include "cairoplot.h"
+#include "test_context.h"
+
 #ifndef _CP_COLOR_TEST_H_
 #define _CP_COLOR_TEST_H_
 

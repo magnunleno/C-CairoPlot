@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  *
- * This file (test_context.h) is part of C-CairoPlot.
+ * This file (data_test.h) is part of C-CairoPlot.
  *
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -18,18 +18,15 @@
  *
  */
 
+#include <check.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <check.h>
-#include <string.h>
+#include "cairoplot.h"
+#include "test_context.h"
 
-#ifndef _CP_TEST_CONTEXT_H_
-#define _CP_TEST_CONTEXT_H_
+#ifndef _CP_DATA_TEST_H_
+#define _CP_DATA_TEST_H_
 
-#define check_equal_n(received, expected, err_msg) fail_unless(received == expected, err_msg, received, expected);
-#define check_equal_s(received, expected, err_msg) fail_unless(strcmp(received, expected) == 0, err_msg, received, expected);
-#define check_equal_null(received) fail_unless(received == NULL, "Variable '%s' wasn't NULL", #received);
+Suite* data_suite(void);
 
-#endif // _CP_TEST_CONTEXT_H_
-
-
+#endif // _CP_DATA_TEST_H_
