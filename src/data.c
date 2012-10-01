@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (color.c) is part of C-CairoPlot.
+ * This file (data.c) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include "data.h"
 
-CP_Data *cp_newData(char *label, double x, double y, double z)
+CP_Object *cp_newData(char *label, double x, double y, double z)
 {
 	CP_Data *data = cp_new(1, CP_Data);
 	data->x = x;
@@ -34,7 +34,7 @@ CP_Data *cp_newData(char *label, double x, double y, double z)
 	data->param_z = 0.0;
 
 	data->label = label;
-	return data;
+	return cp_newObject((void*)data, CP_DATA);
 }
 
 void _cp_deleteData(void *content)

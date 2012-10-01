@@ -20,7 +20,7 @@
 
 #include <check.h>
 #include "cairoplot.h"
-#include "test_context.h"
+#include "utils.h"
 
 #ifndef _CP_UTIL_TEST_H_
 #define _CP_UTIL_TEST_H_

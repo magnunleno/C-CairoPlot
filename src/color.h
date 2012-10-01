@@ -18,22 +18,15 @@
  *
  */
 
+#ifndef _CP_COLOR_H_
+#define _CP_COLOR_H_
+
 #include "util.h"
-#include "list.h"
+#include "object.h"
 
-#ifndef _CP_COLOR_H
-#define _CP_COLOR_H
-
-typedef struct CP_COLOR
-{
-	double red;
-	double green;
-	double blue;
-	double alpha;
-} CP_Color;
-
-CP_Color *cp_newColor(double red, double green, double blue, double alpha);
+CP_Object *cp_newColor(double red, double green, double blue, double alpha);
 #define cp_appendColor(list, red, green, blue, alpha) cp_appendNode(list, CP_Color(red, green, blue, alpha))
+#define cp_colorAttr(obj, attr) ((CP_Color*)obj->content)->attr
 
 void _cp_deleteColor(void *content);
-#endif // _CP_COLOR_H
+#endif // _CP_COLOR_H_

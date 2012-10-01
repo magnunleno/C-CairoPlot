@@ -23,78 +23,59 @@
 
 #include "cairoplot.h"
 
-typedef struct TEST_DATA
-{
-	int value;
-} TestData;
-
-void deleteTestData(void *content)
-{
-	TestData *data = (TestData *)content;
-	printf("Data delete %i\n", data->value);
-	free(data);
-}
-
-void dummyDelete(void *content)
-{
-	printf("Dummy delete %i\n", (int)content);
-}
-
-TestData *newData(int value)
-{
-	TestData *data = cp_new(1, TestData);
-	data->value = value;
-	return data;
-}
-
-void test_data_list()
-{
-	CP_List *list = cp_newList();
-	TestData *data = NULL;
-
-	data = cp_new(1, TestData);
-	data->value = 12;
-	cp_appendNode(list, data); 
-
-	cp_appendNode(list, newData(13));
-
-	data = cp_new(1, TestData);
-	data->value = 14;
-	cp_appendNode(list, data);
-
-	printf("Size of list %i\n", list->size);
-	cp_deleteList(list, &deleteTestData);
-}
-
-void test_int_list()
-{
-	CP_List *list = cp_newList();
-
-	cp_appendNode(list, 10);
-	cp_appendNode(list, 11);
-	cp_appendNode(list, 12);
-
-	printf("Size of list %i\n", list->size);
-	cp_emptyList(list, &dummyDelete);
-
-	free(list);
-}
-
 void test_color_list()
 {
-	CP_List *colorList = cp_newList();
-	cp_appendNode(colorList, cp_newColor(0.1, 0.2, 0.3, 0.4));
-	cp_appendNode(colorList, cp_newColor(0.2, 0.3, 0.4, 0.5));
-	cp_appendNode(colorList, cp_newColor(0.3, 0.4, 0.5, 0.6));
+	CP_Color *color = NULL;
+	CP_List *list = cp_newList(CP_COLOR);
 
-	cp_deleteList(colorList, _cp_deleteColor);
-	printf("Done with color list\n");
+	cp_appendNode(list, cp_newColor(0.1, 0.2, 0.3, 1.0));
+	cp_appendNode(list, cp_newColor(0.2, 0.3, 0.4, 1.0));
+	cp_appendNode(list, cp_newColor(0.3, 0.4, 0.5, 1.0));
+	for (cp_startIter(list); list->iter; cp_iterNext(list))
+	{
+		color = cp_iterUnpack(list, CP_Color*);
+	}
+
+	cp_deleteList(list);
+}
+void test_sub_lists()
+{
+	CP_List *list = cp_newList(CP_LIST);
+
+	CP_List *subList1 = cp_newList(CP_COLOR);
+	cp_appendNode(subList1, cp_newColor(0.1, 0.1, 0.1, 1.0));
+	cp_appendNode(subList1, cp_newColor(0.2, 0.2, 0.2, 1.0));
+	cp_appendNode(subList1, cp_newColor(0.3, 0.3, 0.3, 1.0));
+	cp_appendSubList(list, subList1);
+
+	CP_List *subList2 = cp_newList(CP_COLOR);
+	cp_appendNode(subList2, cp_newColor(0.2, 0.2, 0.2, 1.0));
+	cp_appendNode(subList2, cp_newColor(0.3, 0.3, 0.3, 1.0));
+	cp_appendNode(subList2, cp_newColor(0.4, 0.4, 0.4, 1.0));
+	cp_appendSubList(list, subList2);
+
+	CP_List *subList3 = cp_newList(CP_COLOR);
+	cp_appendNode(subList3, cp_newColor(0.3, 0.3, 0.3, 1.0));
+	cp_appendNode(subList3, cp_newColor(0.4, 0.4, 0.4, 1.0));
+	cp_appendNode(subList3, cp_newColor(0.5, 0.5, 0.5, 1.0));
+	cp_appendSubList(list, subList3);
+
+	CP_List *subList = NULL;
+	CP_Color *color;
+	for (cp_startIter(list); list->iter; cp_iterNext(list)){
+		subList = cp_iterUnpack(list, CP_List*);
+		for (cp_startIter(subList); subList->iter; cp_iterNext(subList))
+		{
+			color = cp_iterUnpack(list, CP_Color*);
+		}
+	}
+
+	cp_deleteList(list);
 }
 
 int main(int argc, char const *argv[])
 {
-	test_int_list();
-	test_data_list();
 	test_color_list();
+	test_sub_lists();
 	return 0;
 }

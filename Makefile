@@ -36,8 +36,8 @@ CFLAGS=`pkg-config --cflags $(libdeps)`
 LIBS=`pkg-config --libs $(libdeps)`
 FLAGS=-Wall -I./src -L./build
 
-ALL=util list color data
-TESTS=util.test list.test color.test data.test main.test
+ALL=util object color list data 
+TESTS=util.test color.test data.test list.test main.test
 BUILD_DIR=build
 TESTS_DIR=tests
 TESTS:=$(addprefix $(BUILD_DIR)/$(TESTS_DIR)/,$(TESTS))
@@ -90,10 +90,12 @@ clean:
 	@echo
 
 ####### Prerequisites
-$(BUILD_DIR)/data.o: data.h data.c
+$(BUILD_DIR)/util.o: util.h util.c
+$(BUILD_DIR)/object.o: object.h object.c
 $(BUILD_DIR)/color.o: color.h color.c
 $(BUILD_DIR)/data.o: data.h data.c
 $(BUILD_DIR)/list.o: list.h list.c
+$(BUILD_DIR)/context.o: context.h context.c
 
 ####### Build
 $(BUILD_DIR)/$(TESTS_DIR)/%.test: %_test.c

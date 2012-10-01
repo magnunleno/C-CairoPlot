@@ -26,6 +26,7 @@
 #include "list_test.h"
 #include "color_test.h"
 #include "data_test.h"
+#include "context_test.h"
 
 int main(void){
 	int number_failed;

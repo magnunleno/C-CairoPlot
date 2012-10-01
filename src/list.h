@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (list_util.h) is part of C-CairoPlot.
+ * This file (list.h) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -18,46 +18,33 @@
  *
  */
 
+
+#ifndef _CP_LIST_H_
+#define _CP_LIST_H_
+
 #include "util.h"
+#include "object.h"
 
-#ifndef _CP_LIST_H
-#define _CP_LIST_H
+CP_List *cp_newList(CP_ObjectType type);
 
-typedef struct CP_LIST_NODE
-{
-	struct CP_LIST_NODE *next;
-	struct CP_LIST_NODE *previous;
-	void* content;
-} CP_ListNode;
-
-typedef struct CP_LIST
-{
-	CP_ListNode *first;
-	CP_ListNode *last;
-	CP_ListNode *iter;
-	int size;
-	struct CP_COLOR *next;
-} CP_List;
-
-CP_List *cp_newList();
-
-void __cp_appendNode(CP_List *list, void* node);
-#define cp_appendNode(list, node) __cp_appendNode(list, (void*)node)
+void cp_appendNode(CP_List *list, CP_Object *object);
+void cp_appendSubList(CP_List *list, CP_List *subList);
 
 #define cp_startIter(list) list->iter = list->first
 
 #define cp_iterNext(list) list->iter = list->iter->next
 #define cp_iterNextCircular(list) list->iter = list->iter->next == NULL?list->first:list->iter->next
-#define cp_nodeUnpack(node, type) (type)(node->content)
 #define cp_iterUnpack(list, type) (type)(list->iter->content)
 
-void cp_emptyList(CP_List *list, void (*deleteNodeFunc)(void *));
+CP_Object *cp_getNodeN(CP_List *list, int index);
 
-#define cp_deleteList(list, deleteFunc)			\
+void cp_emptyList(CP_List *list);
+
+#define cp_deleteList(list)						\
 	if (list != NULL && list->first != NULL)	\
-		cp_emptyList(list, deleteFunc);			\
+		cp_emptyList(list);						\
 	free(list);									\
 	list = NULL
 
 
-#endif // _CP_LIST_H
+#endif // _CP_LIST_H_

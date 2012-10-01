@@ -22,7 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "cairoplot.h"
-#include "test_context.h"
+#include "utils.h"
 
 #ifndef _CP_DATA_TEST_H_
 #define _CP_DATA_TEST_H_

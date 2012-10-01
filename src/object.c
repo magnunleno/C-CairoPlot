@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (color.c) is part of C-CairoPlot.
+ * This file (object.c) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -20,21 +20,38 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "color.h"
+#include "object.h"
 
-CP_Object *cp_newColor(double red, double green, double blue, double alpha)
+CP_Object* cp_newObject(void *content, CP_ObjectType type)
 {
-	//TODO: Check if it's betwen 0 and 1
-	CP_Color *color = cp_new(1, CP_Color);
-	color->red = red;
-	color->green = green;
-	color->blue = blue;
-	color->alpha = alpha;
-
-	return cp_newObject((void*)color, CP_COLOR);
+	CP_Object *obj = cp_new(1, CP_Object);
+	obj->type = type;
+	obj->content = content;
+	obj->next = NULL;
+	obj->previous = NULL;
+	return obj;
 }
 
-void _cp_deleteColor(void *content)
+void cp_deleteObject(CP_Object *obj)
 {
-	free((CP_Color *)content);
+	CP_Data *data;
+	switch(obj->type)
+	{
+		case CP_COLOR:
+			free((CP_Color*)obj->content);
+			break;
+		case CP_DATA:
+			free((CP_Data*)obj->content);
+			break;
+		case CP_LIST:
+			printf("Tipo Lista\n");
+			cp_emptyList((CP_List*)obj->content);
+			free((CP_List*)obj->content);
+			break;
+		default:
+			printf("** Tipo de variável (id=%i) ainda não suportada\n", obj->type);
+	}
+	obj->next = NULL;
+	obj->previous = NULL;
+	free(obj);
 }

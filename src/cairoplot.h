@@ -20,9 +20,14 @@
 #ifndef _CAIROPLOT_H
 #define _CAIROPLOT_H
 
+#include <cairo.h>
+#include <cairo-svg.h>
+
 #include "util.h"
 #include "list.h"
 #include "color.h"
 #include "data.h"
+#include "object.h"
+#include "context.h"
 
 #endif // _CAIROPLOT_H

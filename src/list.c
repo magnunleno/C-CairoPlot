@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (list_util.c) is part of C-CairoPlot.
+ * This file (list.c) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -22,9 +22,10 @@
 #include <stdio.h>
 #include "list.h"
 
-CP_List *cp_newList()
+CP_List *cp_newList(CP_ObjectType type)
 {
 	CP_List *list = cp_new(1, CP_List);
+	list->type = type;
 	list->first = NULL;	
 	list->last = NULL;
 	list->iter = NULL;
@@ -32,27 +33,67 @@ CP_List *cp_newList()
 	return list;
 }
 
-void __cp_appendNode(CP_List *list, void* content)
+void cp_appendNode(CP_List *list, CP_Object* obj)
 {
-	CP_ListNode *node = cp_new(1, CP_ListNode);
-	node->next = NULL;
-	node->previous = NULL;
-	node->content = content;
+	if (obj->type != list->type)
+	{
+		printf("This list is not initialized for this kind of object\n");
+		return;
+	}
 
 	if (list->size == 0)
-		list->first = node;
+		list->first = obj;
 	else
 	{
-		list->last->next = node;
-		node->previous = list->last;
+		list->last->next = obj;
+		obj->previous = list->last;
 	}
-	list->last = node;
+	list->last = obj;
 	list->size++;
 }
 
-void cp_emptyList(CP_List *list, void (*deleteNodeFunc)(void *))
+void cp_appendSubList(CP_List *list, CP_List *subList)
 {
-	CP_ListNode *current;
+	CP_Object *obj = cp_newObject((void*)subList, CP_LIST);
+	cp_appendNode(list, obj);
+}
+
+CP_Object *cp_getNodeN(CP_List *list, int index)
+{
+	//TODO: Add a verification to ensure that the index is below list size
+	int counter = 0;
+	CP_Object *obj = NULL;
+	if (index == 0)
+	{
+		obj = list->first;
+		return obj;
+	}
+
+	if ((index == -1) || (index == (list->size - 1)))
+	{
+		obj = list->last;
+		return obj;
+	}
+
+	CP_Object *context_iter = list->iter;
+
+	for (cp_startIter(list); list->iter; cp_iterNext(list))
+	{
+		if (counter == index)
+		{
+			obj = list->iter;
+			break;
+		}
+		counter++;
+	}
+
+	list->iter = context_iter;
+	return obj;
+}
+
+void cp_emptyList(CP_List *list)
+{
+	CP_Object *current;
 	cp_startIter(list);
 	while (list->iter)
 	{
@@ -64,8 +105,7 @@ void cp_emptyList(CP_List *list, void (*deleteNodeFunc)(void *))
 			list->first = NULL;
 		}
 		list->first = list->iter;
-		deleteNodeFunc(current->content);
-		free(current);
+		cp_deleteObject(current);
 		list->size--;
 	}
 	list->first = NULL;

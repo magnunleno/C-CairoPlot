@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno da Silva
  * 
- * This file (color_test.h) is part of C-CairoPlot.
+ * This file (object.h) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -18,13 +18,18 @@
  *
  */
 
-#include <check.h>
-#include "cairoplot.h"
-#include "utils.h"
 
-#ifndef _CP_COLOR_TEST_H_
-#define _CP_COLOR_TEST_H_
+#ifndef _CP_OBJECT_H_
+#define _CP_OBJECT_H_
 
-Suite* color_suite(void);
+#include "util.h"
+#include "color.h"
+#include "data.h"
+#include "list.h"
 
-#endif // _CP_COLOR_TEST_H_
+CP_Object* cp_newObject(void *content, CP_ObjectType type);
+#define cp_objectUnpack(obj, type) (type)(obj->content)
+
+void cp_deleteObject(CP_Object *object);
+
+#endif // _CP_OBJECT_H_

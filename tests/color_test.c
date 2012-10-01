@@ -22,17 +22,17 @@
 
 START_TEST(test_color_creation)
 {
-	CP_Color *color = cp_newColor(0.10, 0.11, 0.12, 0.13);
-	check_equal_n(color->red, 0.10, "Found '%f' as red, expected '%f'");
-	check_equal_n(color->green, 0.11, "Found '%f' as green, expected '%f'");
-	check_equal_n(color->blue, 0.12, "Found '%f' as blue, expected '%f'");
-	check_equal_n(color->alpha, 0.13, "Found '%f' as alpha, expected '%f'");
-	free(color);
+	CP_Object *colorObj = cp_newColor(0.10, 0.11, 0.12, 0.13);
+	check_equal_n(cp_colorAttr(colorObj, red), 0.10, "Found '%f' as red, expected '%f'");
+	check_equal_n(cp_colorAttr(colorObj, green), 0.11, "Found '%f' as green, expected '%f'");
+	check_equal_n(cp_colorAttr(colorObj, blue), 0.12, "Found '%f' as blue, expected '%f'");
+	check_equal_n(cp_colorAttr(colorObj, alpha), 0.13, "Found '%f' as alpha, expected '%f'");
+	cp_deleteObject(colorObj);
 }END_TEST
 
 START_TEST(test_colorlist_creation)
 {
-	CP_List *colorList = cp_newList();
+	CP_List *colorList = cp_newList(CP_COLOR);
 	cp_appendNode(colorList, cp_newColor(0.1, 0.2, 0.3, 0.4));
 	cp_appendNode(colorList, cp_newColor(0.2, 0.3, 0.4, 0.5));
 	cp_appendNode(colorList, cp_newColor(0.3, 0.4, 0.5, 0.6));
@@ -45,21 +45,23 @@ START_TEST(test_colorlist_creation)
 		{0.3, 0.4, 0.5, 0.6}
 	};
 	double *value;
+	CP_Color *color;
 	for (cp_startIter(colorList); colorList->iter; cp_iterNext(colorList))
 	{
 		value = values[n];
-		check_equal_n(value[0], ((CP_Color*)colorList->iter)->red, 
+		color = cp_iterUnpack(colorList, CP_Color*);
+		check_equal_n(value[0], color->red,
 				"Found '%f' as red, expected '%f'");
-		check_equal_n(value[1], ((CP_Color*)colorList->iter)->green,
+		check_equal_n(value[1], color->green,
 				"Found '%f' as green, expected '%f'");
-		check_equal_n(value[2], ((CP_Color*)colorList->iter)->blue,
+		check_equal_n(value[2], color->blue,
 				"Found '%f' as blue, expected '%f'");
-		check_equal_n(value[3], ((CP_Color*)colorList->iter)->alpha,
+		check_equal_n(value[3], color->alpha,
 				"Found '%f' as alpha, expected '%f'");
 		n++;
 	}
 
-	cp_deleteList(colorList, &_cp_deleteColor);
+	cp_deleteList(colorList);
 	check_equal_null(colorList);
 
 }END_TEST
@@ -71,7 +73,6 @@ Suite* color_suite(void)
 	TCase *tc_core = tcase_create("Color testcase");
 	tcase_add_test(tc_core, test_color_creation);
 	//tcase_add_test(tc_core, test_colorlist_creation);
-	//tcase_add_test(tc_core, test_colorlist_cleanup);
 
 	suite_add_tcase(s, tc_core);
 	return s;
