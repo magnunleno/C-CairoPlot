@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (color_test.h) is part of C-CairoPlot.
  * 

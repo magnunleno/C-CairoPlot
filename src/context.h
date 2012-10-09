@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (context.h) is part of C-CairoPlot.
  * 
@@ -18,58 +18,29 @@
  *
  */
 
-#include "color.h"
+#include "util.h"
+#include "series.h"
+
+// Silence is golden...
 
 #ifndef _CP_CONTEXT_H_
 #define _CP_CONTEXT_H_
 
 CP_Context* cp_newContext(char *name, int width, int height);
-void cp_contextAddColorList(CP_Context *context, CP_List *color);
-/*
-void cp_drawBackground(CP_Context *context);
-void cp_context(CP_Context *context);
-void cp_initEnv(CP_Context *context);
-void cp_endEnv(CP_Context *context);
 
+// Background Color
+void cp_setBgColorRGB(CP_Context *ctx, int red, int green, int blue, double alpha);
+void cp_setBgColorHTML(CP_Context *ctx, unsigned int value, double alpha);
+void cp_setBgColorHSV(CP_Context *ctx, double hue, double saturation, double value, double alpha);
 
-//#define cp_initEnv(context)												\
-//	if (context->ft == CP_PNG){											\
-//		context->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, \
-//				context->width, context->height);								\
-//	}else{																\
-//		cp_addFileExtension(&(context->fname), context->name, context->ft);		\
-//		context->surface = cairo_svg_surface_create(context->fname,			\
-//				context->width, context->height);								\
-//		cairo_svg_surface_restrict_to_version(context->surface,			\
-//				CAIRO_SVG_VERSION_1_2);									\
-//	}
-//
-//#define cp_endEnv(context)												\
-//	if (context->ft == CP_PNG){										\
-//		cp_addFileExtension(&(context->fname), context->name, context->ft);	\
-//		cairo_surface_write_to_png(context->surface, context->fname);		\
-//		cairo_destroy(context->cr);									\
-//		cairo_surface_destroy(context->surface);						\
-//	}else{															\
-//		cairo_surface_flush(context->surface);							\
-//		cairo_surface_finish(context->surface);						\
-//		cairo_surface_destroy(context->surface);						\
-//		cairo_destroy(context->cr);									\
-//	}
+// Background Gradient
+CP_Gradient *cp_setBgGradientRGB(CP_Context *ctx, double pos, int red, int green, int blue, double alpha);
+CP_Gradient *cp_setBgGradientHTML(CP_Context *ctx, double pos, unsigned int value, double alpha);
+CP_Gradient *cp_setBgGradientHSV(CP_Context *ctx, double pos, double hue, double saturation, double value, double alpha);
 
-#define cp_setBgColor(context, red, green, blue)				\
-	if (context->bgColor != NULL)								\
-		free(context->bgColor);								\
-	context->bgColor = cp_newColor(red, green, blue, 1.0)
-
-#define cp_deleteContext(context)								\
-	if (context->bgColor != NULL)							\
-		free(context->bgColor);							\
-	free(context);											\
-	context = NULL
-
-//CP_Context* cp_drawBackground(char *name, int width, int height);
-*/
+// Destroy
+void _cp_destroyContext(CP_Context **pCtx);
+#define cp_destroyContext(ctx) _cp_destroyContext(&ctx)
 
 #endif // _CP_CONTEXT_H_
 

@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno
  *
- * This file (main_test.c) is part of C-CairoPlot.
+ * This file (series_test.h) is part of C-CairoPlot.
  *
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -18,28 +18,15 @@
  *
  */
 
-#include <stdio.h>
-#include <glib.h>
 #include <check.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "cairoplot.h"
+#include "utils.h"
 
-#include "util_test.h"
-#include "color_test.h"
-#include "data_test.h"
-#include "series_test.h"
-#include "barplot_test.h"
+#ifndef _CP_SERIES_TEST_H_
+#define _CP_SERIES_TEST_H_
 
-int main(void){
-	int number_failed;
+Suite* series_suite(void);
 
-	SRunner *sr;
-	sr = srunner_create(util_suite());
-	srunner_add_suite(sr, data_suite());
-	srunner_add_suite(sr, color_suite());
-	srunner_add_suite(sr, series_suite());
-	srunner_add_suite(sr, barplot_suite());
-	srunner_run_all(sr, CK_NORMAL);
-
-	number_failed = srunner_ntests_failed (sr);
-	srunner_free(sr);
-	return (number_failed == 0)?0:1;
-}
+#endif // _CP_SERIES_TEST_H_

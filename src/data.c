@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (data.c) is part of C-CairoPlot.
  * 
@@ -22,22 +22,44 @@
 #include <stdio.h>
 #include "data.h"
 
-CP_Object *cp_newData(char *label, double x, double y, double z)
+/*
+ * Returns a pointer to the newly created Data structure
+ * 		@label:
+ * 			A string used to give a label to the value;
+ * 		@value:
+ * 			The value that will be plotted
+ *
+ */
+CP_Data *cp_newData(char *label, double value)
 {
 	CP_Data *data = cp_new(1, CP_Data);
-	data->x = x;
-	data->y = y;
-	data->z = z;
-
-	data->param_x = 0.0;
-	data->param_y = 0.0;
-	data->param_z = 0.0;
 
 	data->label = label;
-	return cp_newObject((void*)data, CP_DATA);
+	data->value = value;
+	data->norm_value = 0.0;
+
+	return data;
 }
 
-void _cp_deleteData(void *content)
+/*
+ * Returns a pointer to the newly created Point structure
+ * 		@label:
+ * 			A string used to give a label to the value;
+ * 		@x:
+ * 			The value that will be plotted in the x axis
+ * 		@y:
+ * 			The value that will be plotted in the y axis
+ *
+ */
+CP_Point *cp_newPoint(char *label, double x, double y)
 {
-	free((CP_Data *)content);
+	CP_Point *point = cp_new(1, CP_Point);
+
+	point->label = label;
+	point->x = x;
+	point->y = y;
+	point->norm_x = 0.0;
+	point->norm_y = 0.0;
+
+	return point;
 }

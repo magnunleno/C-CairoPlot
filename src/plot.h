@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2012 - Magnun Leno
  * 
- * This file (data.h) is part of C-CairoPlot.
+ * This file (plot.h) is part of C-CairoPlot.
  * 
  * C-CairoPlot is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free
@@ -19,17 +19,26 @@
  */
 
 #include "util.h"
+#include "context.h"
 
 /*
- * This is a very simple file. It only defines the allocation function for the
- * Data and Point structures.
+ * This file defines the basic functions to any plot, such as envidonment
+ * initialization, background drawing, axis drawing, grid drawing...
  *
  */
 
-#ifndef _CP_DATA_H_
-#define _CP_DATA_H_
+#ifndef _CP_PLOT_H_
+#define _CP_PLOT_H_
 
-CP_Data *cp_newData(char *label, double value);
-CP_Point *cp_newPoint(char *label, double x, double y);
+#define DEFAULT_LINE_WIDTH 0.005
 
-#endif // _CP_DATA_H_
+void cp_drawBackground(CP_Context *context);
+void cp_drawAxis(CP_Context *ctx, double x0, double y0, double plottable_width, double plottable_height);
+void cp_drawBorder(CP_Context *ctx, double x0, double y0, double x1, double y1);
+
+void cp_initEnv(CP_Context *context, CP_FileType ft);
+void cp_endEnv(CP_Context *context, CP_FileType ft);
+
+
+#endif // _CP_PLOT_H_
+

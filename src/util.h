@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (util.h) is part of C-CairoPlot.
  * 
@@ -20,40 +20,52 @@
 
 #include <cairo.h>
 #include <cairo-svg.h>
+#include <math.h>
+#include "color.h"
+
+/*
+ * Hi there stranger! This is the C-CairoPlot most basic file. It stores all
+ * enums, structures and the most basic constants. If you're willing to hack
+ * this labrary you should really start reading this file. 
+ *
+ */
 
 #ifndef _CP_UTIL_H_
 #define _CP_UTIL_H_
 
+/*
+ * Some math definitions that will help me finding maximum and minimum series
+ * values
+ */
+#define POS_INF 1.0/0.0
+#define NEG_INF (1.0/0.0)*-1
+
 /******** ENUMS ********/
+// Why doesn't C lang defines this by default? o.O
 typedef enum _BOOL_
 {
 	false = 0,
 	true = 1
 } bool;
 
+// Supported file extensions
 typedef enum _CP_FILE_TYPE_
 {
 	CP_SVG,
 	CP_PNG,
 } CP_FileType;
 
+// Supported Object types
 typedef enum _CP_OBJECT_TYPE_
 {
-	CP_DATA=0,
-	CP_COLOR=1,
-	CP_LIST=2,
+	CP_COLOR,
+	CP_GRADIENT,
+	CP_DATA,
+	CP_POINT,
 } CP_ObjectType;
 
-
 /******** STRUCTS ********/
-typedef struct _CP_OBJECT_
-{
-	void *content;
-	CP_ObjectType type;
-	struct _CP_OBJECT_ *next;
-	struct _CP_OBJECT_ *previous;
-} CP_Object;
-
+// Color structure
 typedef struct _CP_COLOR_
 {
 	double red;
@@ -62,45 +74,93 @@ typedef struct _CP_COLOR_
 	double alpha;
 } CP_Color;
 
-typedef struct _CP_DATA_
+// Gradient structure
+typedef struct _CP_GRADIENT_
+{
+	double position;
+	CP_Color *color;
+	struct _CP_GRADIENT_ *next;
+} CP_Gradient;
+
+// Object structure
+typedef struct _CP_OBJECT_
+{
+	void *content;
+	CP_ObjectType type;
+	struct _CP_OBJECT_ *next;
+	struct _CP_OBJECT_ *previous;
+} CP_Object;
+
+// Point structure
+typedef struct _CP_POINT_
 {
 	char *label;
 	double x;
 	double y;
-	double z;
-	double param_x;
-	double param_y;
-	double param_z;
-	struct _CP_DATA_ *next;
+	double norm_x;
+	double norm_y;
+} CP_Point;
+
+// Data structure
+typedef struct _CP_DATA_
+{
+	char *label;
+	double value;
+	double norm_value;
 } CP_Data;
 
-typedef struct _CP_LIST_
+// Series structure
+typedef struct _CP_SERIES_
 {
+	char *label;
 	CP_Object *first;
 	CP_Object *last;
 	CP_Object *iter;
 	CP_ObjectType type;
 	int size;
-} CP_List;
+} CP_Series;
 
+// Context structure
 typedef struct _CP_CONTEXT_
 {
 	int width;
 	int height;
 	char *name;
-	char *fname;
-	CP_FileType ft;
-	CP_Color *bgColor;
-	CP_List *plotColor;
-	CP_List *serie;
 
+	CP_Color *bgColor;
+	CP_Gradient *bgGradient;
+	CP_Series *colors;
+	bool flatColors;
+
+	double left_margin;
+	double right_margin;
+	double bottom_margin;
+	double top_margin;
+
+	bool drawAxis;
+	bool drawBox;
+
+	char *fname;
 	cairo_surface_t *surface;
 	cairo_t *cr;
 } CP_Context;
 
+// Bar Plot settings structure
+typedef struct _CP_BARPLOT_SETTINGS_
+{
+	bool roundBorders;
+	double borderRadius;
+	double barPadding;
 
+	// TODO: Implement orientation;
+} CP_BarPlotSettings;
+
+/***** Functions *****/
 void cp_addFileExtension(char **ppRetFilename, char *filename, CP_FileType ft);
+CP_Object* cp_newObject(void *content, CP_ObjectType type);
+void cp_destroyObject(CP_Object *obj);
 
+/***** Macros ******/
 #define cp_new(n, type) (type*)calloc(n, sizeof(type))
 
-#endif // _CP_UTIL_H_
+#endif  // _CP_UTIL_H_

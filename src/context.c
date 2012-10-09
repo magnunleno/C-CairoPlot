@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (context.c) is part of C-CairoPlot.
  * 
@@ -24,116 +24,214 @@
 #include <cairo-svg.h>
 #include "context.h"
 
+/*
+ * This function initializes a Context Structure used to set the most generic
+ * settings to all plots.
+ * 		@name: 
+ * 			The name of the plot
+ * 		@width: 
+ * 			The width (in pixels) of the output image
+ * 		@height: 
+ * 			The height (in pixels) of the output image
+ *
+ */
 CP_Context* cp_newContext(char *name, int width, int height)
 {
 	CP_Context *context = cp_new(1, CP_Context);
-	context->serie = NULL;
-	context->bgColor = NULL;
-	context->plotColor = NULL;
-	context->fname = NULL;
-	context->ft = CP_PNG;
 	context->name = name;
 	context->width = width;
 	context->height = height;
 
+	context->bgColor = NULL;
+	context->colors = NULL;
+	context->flatColors = true;
+
+	context->fname = NULL;
 	context->surface = NULL;
 	context->cr = NULL;
+
+	context->drawAxis = true;
+	context->drawBox = true;
 	return context;
 }
 
-void cp_contextAddColorList(CP_Context *context, CP_List *colorList)
+/*
+ * Function that safely sets the Background color (using RGB) to the CP_Context
+ * structure
+ * 		@ctx:
+ * 			CP_Context structure that holds the background color.
+ * 		@red: 
+ * 			Red part of color (from 0 to 255)
+ * 		@green: 
+ * 			Green part of color (from 0 to 255)
+ * 		@blue: 
+ * 			Blue part of color (from 0 to 255)
+ * 		@alpha: 
+ * 			Transparency percentage (from 0.0 to 1.0)
+ *
+ */
+void cp_setBgColorRGB(CP_Context *ctx, int red, int green, int blue, double alpha)
 {
-	if (context->plotColor == NULL)
-		context->plotColor = cp_newList(CP_LIST);
-	cp_appendSubList(context->plotColor, colorList);
-	return;
-}
-
-void cp_contextAddDataList(CP_Context *context, CP_List *dataList)
-{
-	if (context->serie == NULL)
-		context->serie = cp_newList(CP_LIST);
-	cp_appendSubList(context->serie, colorList);
-	return;
+	if (ctx->bgColor != NULL)
+		free(ctx->bgColor);
+	ctx->bgColor = cp_newColorRGB(red, green, blue, alpha);
 }
 
 /*
-void cp_drawBackground(CP_Context *context)
+ * Function that safely sets the Background color (using HTML) to the CP_Context
+ * structure
+ * 		@ctx:
+ * 			CP_Context structure that holds the background color.
+ * 		@value: 
+ * 			The HTML notation which used hexadecimal numbers to define the RGB
+ * 			values (values like 0xADFAA0)
+ * 		@alpha: 
+ * 			Transparency percentage (from 0.0 to 1.0)
+ *
+ */
+void cp_setBgColorHTML(CP_Context *ctx, unsigned int value, double alpha)
 {
-    cairo_pattern_t *pat;
-	pat = cairo_pattern_create_linear(0.5, 0, 0.5, 1);
-	if(context->bgColor == NULL){
-		cairo_pattern_add_color_stop_rgba(pat, 0.0, 1.0, 1.0, 1.0, 1.0);
-		cairo_pattern_add_color_stop_rgba(pat, 1.0, 0.9, 0.9, 0.9, 1.0);
-		cairo_rectangle(context->cr, 0, 0, 1.0, 1.0);
-		cairo_set_source(context->cr, pat);
-		cairo_fill(context->cr);
-		cairo_pattern_destroy(pat);
-	}else{
-		cairo_set_source_rgba(context->cr, context->bgColor->red, context->bgColor->green, context->bgColor->blue, context->bgColor->alpha);
-		cairo_rectangle(context->cr, 0, 0, context->width, context->height);
-		cairo_fill(context->cr);
-	}
+	if (ctx->bgColor != NULL)
+		free(ctx->bgColor);
+	ctx->bgColor = cp_newColorHTML(value, alpha);
 }
-
-void cp_initEnv(CP_Context *context)
-{
-	if (context->ft == CP_PNG){
-		printf("png\n");
-		context->surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-				context->width, context->height);
-	}else{
-		printf("no png\n");
-		cp_addFileExtension(&(context->fname), context->name, context->ft);
-		context->surface = cairo_svg_surface_create(context->fname,
-				context->width, context->height);
-		cairo_svg_surface_restrict_to_version(context->surface,
-				CAIRO_SVG_VERSION_1_2);
-	}
-	context->cr = cairo_create(context->surface);
-}
-
-void cp_endEnv(CP_Context *context)
-{
-	if (context->ft == CP_PNG){
-		cp_addFileExtension(&(context->fname), context->name, context->ft);
-		cairo_surface_write_to_png(context->surface, context->fname);
-		cairo_destroy(context->cr);
-		cairo_surface_destroy(context->surface);
-	}else{
-		cairo_surface_flush(context->surface);
-		cairo_surface_finish(context->surface);
-		cairo_surface_destroy(context->surface);
-		cairo_destroy(context->cr);
-	}
-}
-*/
 
 /*
-void cp_plot(CP_Context *context)
+ * Function that safely sets the Background color (using HSV) to the CP_Context
+ * structure
+ * 		@ctx:
+ * 			CP_Context structure that holds the background color.
+ * 		@hue: 
+ * 			Between 0 and 360º. Determines the color family.
+ * 		@saturation: 
+ * 			Between 0 and 1. Is the degree of strength or purity (how much
+ * 			white is added to the color). 1.0 == No white
+ * 		@value:
+ *			Between 0 and 1. Determines the color brightness (how much black is
+ *			added to the color). 1.0 == No Black
+ * 		@alpha: 
+ * 			Transparency percentage (from 0.0 to 1.0)
+ *
+ */
+void cp_setBgColorHSV(CP_Context *ctx, double hue, double saturation, double value, double alpha)
 {
-	//cp_initEnv(context);
-	//_cp_hbarPlot(context, width, height);
-	//cp_endEnv(context);
-
-	//switch(ft){
-	//	case CP_SVG:
-	//		cp_initSvgEnv(context, width, height, filename);
-	//		break;
-	//	case CP_PNG:
-	//		cp_initPngEnv(context, width, height);
-	//		break;
-	//}
-
-	//_cp_hbarPlot(context, width, height);
-
-	//switch(ft){
-	//	case CP_SVG:
-	//		cp_endSvgEnv(context);
-	//		break;
-	//	case CP_PNG:
-	//		cp_endPngEnv(context, filename);
-	//		break;
-	//}
+	if (ctx->bgColor != NULL)
+		free(ctx->bgColor);
+	ctx->bgColor = cp_newColorHSV(hue, saturation, value, alpha);
 }
-*/
+
+/*
+ * Function that safely sets the Background gradient (using RGB) to the
+ * CP_Context structure
+ * 		@ctx:
+ * 			CP_Context structure that holds the background gradient.
+ * 		@red: 
+ * 			Red part of color (from 0 to 255)
+ * 		@green: 
+ * 			Green part of color (from 0 to 255)
+ * 		@blue: 
+ * 			Blue part of color (from 0 to 255)
+ * 		@alpha: 
+ * 			Transparency percentage (from 0.0 to 1.0)
+ *
+ */
+CP_Gradient *cp_setBgGradientRGB(CP_Context *ctx, double pos, int red, int green, int blue, double alpha)
+{
+	if(ctx->bgGradient != NULL)
+	{
+		cp_destroyGradient(ctx->bgGradient);
+	}
+
+	ctx->bgGradient = cp_newGradientRGB(pos, red, green, blue, alpha);
+	return ctx->bgGradient;
+}
+
+/*
+ * Function that safely sets the Background gradient (using HTML notation) to
+ * the CP_Context structure
+ * 		@ctx:
+ * 			CP_Context structure that holds the background gradient.
+ * 		@value: 
+ * 			The HTML notation which used hexadecimal numbers to define the RGB
+ * 			values (values like 0xADFAA0)
+ * 		@alpha: 
+ * 			Transparency percentage (from 0.0 to 1.0)
+ *
+ */
+CP_Gradient *cp_setBgGradientHTML(CP_Context *ctx, double pos, unsigned int value, double alpha)
+{
+	if(ctx->bgGradient != NULL)
+	{
+		cp_destroyGradient(ctx->bgGradient);
+	}
+
+	ctx->bgGradient = cp_newGradientHTML(pos, value, alpha);
+	return ctx->bgGradient;
+}
+
+/*
+ * Function that safely sets the Background gradient (using HSV) to the
+ * CP_Context structure
+ * 		@ctx:
+ * 			CP_Context structure that holds the background gradient.
+ * 		@hue: 
+ * 			Between 0 and 360º. Determines the color family.
+ * 		@saturation: 
+ * 			Between 0 and 1. Is the degree of strength or purity (how much
+ * 			white is added to the color). 1.0 == No white
+ * 		@value:
+ *			Between 0 and 1. Determines the color brightness (how much black is
+ *			added to the color). 1.0 == No Black
+ * 		@alpha: 
+ * 			Transparency percentage (from 0.0 to 1.0)
+ *
+ */
+CP_Gradient *cp_setBgGradientHSV(CP_Context *ctx, double pos, double hue, double saturation, double value, double alpha)
+{
+	if(ctx->bgGradient != NULL)
+	{
+		cp_destroyGradient(ctx->bgGradient);
+	}
+
+	ctx->bgGradient = cp_newGradientHSV(pos, hue, saturation, value, alpha);
+	return ctx->bgGradient;
+}
+
+/*
+ * Function destroys the CP_Context structure and points it to NULL
+ * 		@ctx:
+ * 			CP_Context structure to be destroyed.
+ *
+ */
+void _cp_destroyContext(CP_Context **pCtx)
+{
+	CP_Context *ctx;
+
+	ctx = *pCtx;
+	// Background Color
+	if (ctx->bgColor != NULL)
+	{
+		free(ctx->bgColor);
+		ctx->bgColor = NULL;
+	}
+	// Background Gradient
+	if(ctx->bgGradient != NULL)
+	{
+		cp_destroyGradient(ctx->bgGradient);
+	}
+	// Plot Color
+	if(ctx->colors != NULL)
+	{
+		cp_destroySeries(ctx->colors);
+	}
+	// File Name
+	if(ctx->fname != NULL)
+	{
+		free(ctx->fname);
+		ctx->fname = NULL;
+	}
+
+	// Free the CP_Context structure and points it to NULL
+	free(ctx);
+	*pCtx = NULL;
+}

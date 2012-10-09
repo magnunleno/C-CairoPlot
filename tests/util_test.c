@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (util_test.c) is part of C-CairoPlot.
  * 
@@ -22,6 +22,9 @@
 
 START_TEST(test_file_extention)
 {
+	/*
+	 * Tests the file name allocation
+	 */
 	char *fname1 = "testname";
 	char *fname2 = "/test/path/testname";
 	char *filename = NULL;

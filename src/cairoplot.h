@@ -1,6 +1,6 @@
 /*
  * C-CairoPlot - A plotting library based on Cairo
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This program is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
@@ -20,14 +20,15 @@
 #ifndef _CAIROPLOT_H
 #define _CAIROPLOT_H
 
-#include <cairo.h>
-#include <cairo-svg.h>
-
+/* Base libraries */
 #include "util.h"
-#include "list.h"
 #include "color.h"
 #include "data.h"
-#include "object.h"
+#include "series.h"
 #include "context.h"
+
+/* Plotting libraries */
+#include "plot.h"
+#include "barplot.h"
 
 #endif // _CAIROPLOT_H

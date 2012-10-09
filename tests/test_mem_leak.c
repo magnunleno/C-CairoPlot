@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 - Magnun Leno da Silva
+ * Copyright (C) 2012 - Magnun Leno
  * 
  * This file (test_mem_leak.c) is part of C-CairoPlot.
  * 
@@ -22,60 +22,122 @@
 #include <stdlib.h>
 
 #include "cairoplot.h"
+#include "cairo.h"
 
-void test_color_list()
+void test_file_extension()
 {
-	CP_Color *color = NULL;
-	CP_List *list = cp_newList(CP_COLOR);
-
-	cp_appendNode(list, cp_newColor(0.1, 0.2, 0.3, 1.0));
-	cp_appendNode(list, cp_newColor(0.2, 0.3, 0.4, 1.0));
-	cp_appendNode(list, cp_newColor(0.3, 0.4, 0.5, 1.0));
-	for (cp_startIter(list); list->iter; cp_iterNext(list))
-	{
-		color = cp_iterUnpack(list, CP_Color*);
-	}
-
-	cp_deleteList(list);
+	char *fname = NULL;
+	char *name = "teste";
+	cp_addFileExtension(&fname, name, CP_SVG);
+	free(fname);
 }
-void test_sub_lists()
+
+void test_data_series()
 {
-	CP_List *list = cp_newList(CP_LIST);
+	CP_Series *series;
 
-	CP_List *subList1 = cp_newList(CP_COLOR);
-	cp_appendNode(subList1, cp_newColor(0.1, 0.1, 0.1, 1.0));
-	cp_appendNode(subList1, cp_newColor(0.2, 0.2, 0.2, 1.0));
-	cp_appendNode(subList1, cp_newColor(0.3, 0.3, 0.3, 1.0));
-	cp_appendSubList(list, subList1);
+	series = cp_newDataSeries("Series name");
+	cp_appendData(series, "label 1", 10.0);
+	cp_appendData(series, "label 2", 11.0);
+	cp_appendData(series, "label 3", 12.0);
 
-	CP_List *subList2 = cp_newList(CP_COLOR);
-	cp_appendNode(subList2, cp_newColor(0.2, 0.2, 0.2, 1.0));
-	cp_appendNode(subList2, cp_newColor(0.3, 0.3, 0.3, 1.0));
-	cp_appendNode(subList2, cp_newColor(0.4, 0.4, 0.4, 1.0));
-	cp_appendSubList(list, subList2);
+	cp_appendPoint(series, "label 4", 12.0, 12.0);
 
-	CP_List *subList3 = cp_newList(CP_COLOR);
-	cp_appendNode(subList3, cp_newColor(0.3, 0.3, 0.3, 1.0));
-	cp_appendNode(subList3, cp_newColor(0.4, 0.4, 0.4, 1.0));
-	cp_appendNode(subList3, cp_newColor(0.5, 0.5, 0.5, 1.0));
-	cp_appendSubList(list, subList3);
+	int n = 0;
+	CP_Data *current = NULL;
+	for (cp_startIter(series); series->iter; cp_iterNext(series)){
+		current = cp_iterUnpack(series, CP_Data*);
+		n++;
+	}
+	cp_emptySeries(series);
+	cp_destroySeries(series);
 
-	CP_List *subList = NULL;
-	CP_Color *color;
-	for (cp_startIter(list); list->iter; cp_iterNext(list)){
-		subList = cp_iterUnpack(list, CP_List*);
-		for (cp_startIter(subList); subList->iter; cp_iterNext(subList))
-		{
-			color = cp_iterUnpack(list, CP_Color*);
-		}
+}
+void test_point_lists()
+{
+	CP_Series *series;
+	series = cp_newPointSeries("Series name");
+	cp_appendPoint(series, "label 1", 10.0, 11.0);
+	cp_appendPoint(series, "label 2", 11.0, 12.0);
+	cp_appendPoint(series, "label 3", 12.0, 13.0);
+
+	cp_appendData(series, "label 3", 12.0);
+
+	int n = 0;
+	CP_Point *current = NULL;
+	for (cp_startIter(series); series->iter; cp_iterNext(series)){
+		current = cp_iterUnpack(series, CP_Point*);
+		n++;
+	}
+	cp_destroySeries(series);
+}
+
+void test_series_circular_iteration()
+{
+	double value;
+	CP_Series *series = cp_newDataSeries(NULL);
+	int count = 0;
+	
+	cp_appendData(series, NULL, 1.0);
+	cp_appendData(series, NULL, 0.5);
+	cp_appendData(series, NULL, 0.25);
+
+	// Test iteration in a for loop
+	for (cp_startIter(series); series->iter; cp_iterNextCircular(series)){
+		value = cp_iterDataAttr(series, value);
+		count++;
+		if (count == 5)
+			break;
 	}
 
-	cp_deleteList(list);
+
+	// Test iteration in a while loop
+	count = 0;
+	cp_startIter(series);
+	while (series->iter){
+		value = cp_iterDataAttr(series, value);
+		count++;
+		if (count == 5)
+			break;
+		cp_iterNextCircular(series);
+	}
+
+	cp_destroySeries(series);
+}
+
+void test_hbar()
+{
+
+	CP_Context *context = cp_newContext("context_test", 400, 250);
+	cp_setBgColorHSV(context, 0, 0.0, 0.85, 1.0);
+	context->left_margin = 0.02;
+	context->right_margin = 0.02;
+	context->bottom_margin = 0.02;
+	context->top_margin = 0.02;
+	context->flatColors = true;
+
+	CP_BarPlotSettings *sett = cp_newBarPlotSettings();
+	sett->barPadding = 0.01;
+
+	CP_Series *series = cp_newDataSeries("Basic Bar Plot");
+	cp_appendData(series, "Value 1", 4);
+	cp_appendData(series, "Value 2", 10);
+	cp_appendData(series, "Value 3", 6);
+
+	cp_barPlot(context, sett, series, CP_SVG);
+	//cp_barPlot(context, series, sett, CP_PNG);
+	cp_destroySeries(series);
+	free(sett);
+	cp_destroyContext(context);
+
 }
 
 int main(int argc, char const *argv[])
 {
-	test_color_list();
-	test_sub_lists();
+	test_file_extension();
+	test_data_series();
+	test_point_lists();
+	test_series_circular_iteration();
+	test_hbar();
 	return 0;
 }
