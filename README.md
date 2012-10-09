@@ -22,7 +22,7 @@ cp_barPlot(NULL, NULL, series, CP_PNG);
 
 cp_destroySeries(series);
 ```
-![Default Horizontal Bar Plot](https://github.com/magnunleno/C-CairoPlot/raw/master/examples/images/horiz_bar_plot.png)
+![Default Horizontal Bar Plot](https://raw.github.com/magnunleno/C-CairoPlot/master/examples/images/horiz_bar_plot.png)
 
 Contributting
 -------------
