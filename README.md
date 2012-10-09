@@ -11,18 +11,18 @@ Examples
 
 Currently C-CairoPlot is short featured and is only capable to plot Horizontal Bar Plots. 
 
-** Default Horizontal Bar Plot **
+**Default Horizontal Bar Plot**
 ```C
 CP_Series *series = cp_newDataSeries("Basic Bar Plot");
 cp_appendData(series, NULL, 4);
 cp_appendData(series, NULL, 10);
 cp_appendData(series, NULL, 6);
 
-cp_barPlot(NULL, NULL, series, CP_SVG);
+cp_barPlot(NULL, NULL, series, CP_PNG);
 
 cp_destroySeries(series);
 ```
-![Default Horizontal Bar Plot](https://github.com/magnunleno/C-CairoPlot/raw/master/examples/images/horiz_bar_plot.svg)
+![Default Horizontal Bar Plot](https://github.com/magnunleno/C-CairoPlot/raw/master/examples/images/horiz_bar_plot.png)
 
 Contributting
 -------------
