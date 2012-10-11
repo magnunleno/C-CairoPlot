@@ -33,8 +33,12 @@
 #define DEFAULT_LINE_WIDTH 0.005
 
 void cp_drawBackground(CP_Context *context);
-void cp_drawAxis(CP_Context *ctx, double x0, double y0, double plottable_width, double plottable_height);
-void cp_drawBorder(CP_Context *ctx, double x0, double y0, double x1, double y1);
+void cp_drawXAxis(CP_Context *ctx, double x0, double y0, double x1);
+void cp_drawYAxis(CP_Context *ctx, double x0, double y0, double y1);
+void cp_drawBox(CP_Context *ctx, double x0, double y0, double x1, double y1);
+void cp_drawYMarks(CP_Context *ctx, double x0, double y0, double step, int count);
+
+void cp_drawGrid(CP_Context *ctx, double maxData, double x0, double y0, double width, double height);
 
 void cp_initEnv(CP_Context *context, CP_FileType ft);
 void cp_endEnv(CP_Context *context, CP_FileType ft);

@@ -32,8 +32,10 @@
 CP_BarPlotSettings *cp_newBarPlotSettings()
 {
 	CP_BarPlotSettings *sett = cp_new(1, CP_BarPlotSettings);
-	sett->barPadding = 0.005;
+	sett->barPadding = 0.02;
 	sett->borderRadius = 0.04;
+	sett->horBoxPadding = 0.02;
+	sett->verBoxPadding = 0.02;
 	return sett;
 }
 
@@ -97,6 +99,25 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	CP_Color *color;
 	CP_Gradient *gradient, *iter;
 	double plottable_width, plottable_height, slot_size, x0, y0;
+	double plotX0, plotY0, axisX0, axisY0;
+	double axisWidth;
+	double axisHeight;
+	double maxData;
+
+	bool destroySettings = false;
+	bool destroyContext = false;
+
+	if (ctx == NULL)
+	{
+		ctx = cp_newContext("horiz_bar_plot", 400, 250);
+		destroyContext = true;
+	}
+	if (sett == NULL)
+	{
+		sett = cp_newBarPlotSettings();
+		destroySettings = true;
+	}
+
 
 	// Initializes the Cairo Environment
 	cp_initEnv(ctx, ft);
@@ -125,8 +146,12 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	 * Graph Plotting pre-requisites *
 	 *********************************/
 	// Calculate the "plotting area"
-	plottable_width = 1 - (ctx->left_margin + ctx->right_margin);
-	plottable_height = 1 - (ctx->top_margin + ctx->bottom_margin);
+	plottable_width = 1 - (ctx->left_margin + ctx->right_margin + sett->horBoxPadding);
+	plottable_height = 1 - (ctx->top_margin + ctx->bottom_margin + sett->verBoxPadding);
+
+	// Axis points
+	axisWidth = 1 - (ctx->left_margin + ctx->right_margin);
+	axisHeight = 1 - (ctx->top_margin + ctx->bottom_margin);
 
 	// TODO: should this vary depending on the orientation?
 	// Calculates the slot size (based on how many bars will be plotted)
@@ -134,17 +159,23 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 
 	// Starting points
 	x0 = ctx->left_margin;
-	y0 = ctx->top_margin + (sett->barPadding/2);
+	y0 = ctx->top_margin + (sett->barPadding/2) + (sett->verBoxPadding/2);
+	plotX0 = x0;
+	plotY0 = y0;
 
 	// Normalizes the data series
-	cp_normDataSeries(series, cp_maxDataSeries(series), plottable_width);
+	maxData = cp_maxDataSeries(series);
+	cp_normDataSeries(series, maxData, plottable_width);
 
 
 	/**********************
 	 * Pre graph plotting *
 	 **********************/
 	// Draw some optional things...
-	cp_drawBackground(ctx);
+	if (ctx->draw & CP_DRAW_BACKGOUND)
+		cp_drawBackground(ctx);
+	if (ctx->draw & CP_DRAW_GRID)
+		cp_drawGrid(ctx, maxData, ctx->left_margin, ctx->top_margin, axisWidth, axisHeight);
 
 
 	/******************
@@ -187,7 +218,7 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 
 		// Calculates next y0 point
 		y0 += slot_size + sett->barPadding;
-		printf("Ending Y = %f\n", y0+slot_size);
+
 		// Iterate to next color
 		cp_iterNextCircular(ctx->colors);
 	}
@@ -200,12 +231,22 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	 * Post graph plotting *
 	 **********************/
 	// Draw some optional things...
-	if (ctx->drawBox)
-		cp_drawBorder(ctx, x0, y0, plottable_width, plottable_height);
-	if (ctx->drawAxis)
-		cp_drawAxis(ctx, x0, y0, plottable_width, plottable_height);
-	printf("Ending border = %f\n", y0+plottable_height);
+	if (ctx->draw & CP_DRAW_BOX)
+		cp_drawBox(ctx, x0, y0, axisWidth, axisWidth);
+	if (ctx->draw & CP_DRAW_X_AXIS)
+		cp_drawXAxis(ctx, x0, y0+axisWidth, axisWidth);
+	if (ctx->draw & CP_DRAW_Y_AXIS)
+	{
+		cp_drawYAxis(ctx, x0, y0, axisHeight);
+		cp_drawYMarks(ctx, plotX0, plotY0-(sett->barPadding/2), slot_size+sett->barPadding, series->size);
+	}
 
 	// End Cairo Environment
 	cp_endEnv(ctx, ft);
+
+	// Drestroy all the allocated structure
+	if (destroySettings == true)
+		free(sett);
+	if (destroyContext == true)
+		cp_destroyContext(ctx);
 }

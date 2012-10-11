@@ -102,6 +102,6 @@ CP_Series *cp_generateFlatColorSeries(int count);
  *   Grtadient series functions and macros   *
  *********************************************/
 #define cp_newGradientSeries() cp_newSeries(NULL, CP_GRADIENT)
-CP_Series *cp_generateGradientColorSeries(int count);
+CP_Series *cp_generateGradientColorSeries(int size);
 
 #endif // _CP_SERIES_H_

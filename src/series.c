@@ -333,10 +333,11 @@ CP_Series *cp_generateFlatColorSeries(int size)
 
 	series = cp_newColorSeries();
 	for (counter=1; counter <= size; counter++)
-		cp_appendColorHSV(series, step*counter, 0.6, 0.80, 1.0);
+		// Old flat color
+		//cp_appendColorHSV(series, step*counter, 0.6, 0.80, 1.0);
+		cp_appendColorHSV(series, step*counter, 0.75, 0.75, 1.0);
 
 	return series;
-
 }
 
 /*
@@ -345,8 +346,31 @@ CP_Series *cp_generateFlatColorSeries(int size)
  * 			The number of colors to be generated.
  *
  */
-CP_Series *cp_generateGradientColorSeries(int count)
+CP_Series *cp_generateGradientColorSeries(int size)
 {
+	int counter;
+	double step;
+	CP_Series *series;
+	CP_Gradient *gradient;
+
+	// Calculates the step (trying to get the "center" of the Hue space)
+	step = 360/(size + 1);
+
+	series = cp_newGradientSeries();
+	for (counter=1; counter <= size; counter++)
+	{
+		// Old gradient
+		//gradient = cp_newGradientHSV(0.0, step*counter, 0.7, 0.5, 1.0);
+		//cp_addColorStopHSV(gradient, 1.0, step*counter, 0.6, 0.8, 1.0);
+
+		gradient = cp_newGradientHSV(0.0, step*counter, 0.95, 0.6, 1.0);
+		cp_addColorStopHSV(gradient, 1.0, step*counter, 0.7, 0.95, 1.0);
+
+		cp_appendGradient(series, gradient);
+	}
+
+	return series;
+	/*
 	// TODO: Review this function
 	int counter;
 	double start, end, step;
@@ -367,6 +391,7 @@ CP_Series *cp_generateGradientColorSeries(int count)
 		cp_appendGradient(series, gradient);
 	}
 	return series;
+	*/
 }
 
 /*

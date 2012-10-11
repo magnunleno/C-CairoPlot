@@ -19,35 +19,54 @@
  */
 
 #include "barplot_test.h"
+START_TEST(test_default_hbar_plot)
+{
+	CP_Series *series = cp_newDataSeries("Basic Bar Plot");
+	cp_appendData(series, NULL, 4);
+	cp_appendData(series, NULL, 10);
+	cp_appendData(series, NULL, 6);
+
+	cp_barPlot(NULL, NULL, series, CP_PNG);
+	cp_destroySeries(series);
+	check_equal_null(series);
+}END_TEST
+
 
 START_TEST(test_basic_hbar_plot){
-	CP_Gradient *bgGradient;
+	return;
+	//CP_Gradient *bgGradient;
 	CP_Context *context = cp_newContext("context_test", 400, 250);
 	//cp_setBgColorRGB(context, 120, 150, 170, 1.0);
 	//cp_setBgColorHTML(context, 0xF00000, 0.5);
-	cp_setBgColorHSV(context, 0, 0.0, 0.85, 1.0);
+	//cp_setBgColorHSV(context, 0, 0.0, 0.85, 1.0);
 
 	//bgGradient = cp_setBgGradientHSV(context, 0.0, 0.0, 0.5, 0.5, 1.0);
 	//cp_addColorStopHSV(bgGradient, 1.0, 0.0, 0.0, 0.85, 1.0);
 
-	context->left_margin = 0.02;
-	context->right_margin = 0.02;
-	context->bottom_margin = 0.02;
-	context->top_margin = 0.02;
-	context->flatColors = true;
-	context->drawAxis = true;
-	context->drawBox = false;
+	//context->left_margin = 0.02;
+	//context->right_margin = 0.02;
+	//context->bottom_margin = 0.02;
+	//context->top_margin = 0.02;
+
+	//context->flatColors = true;
+
+	//context->drawXAxis = true;
+	//context->drawYAxis = true;
+	//context->drawBox = true;
+	//context->drawBackground = true;
 
 	CP_BarPlotSettings *sett = cp_newBarPlotSettings();
-	sett->barPadding = 0.01;
-	sett->borderRadius = 0.04;
+	//sett->horBoxPadding = 0.02;
+	//sett->verBoxPadding = 0.05;
+	//sett->barPadding = 0.01;
+	//sett->borderRadius = 0.04;
 
 	CP_Series *series = cp_newDataSeries("Basic Bar Plot");
 	cp_appendData(series, "Value 1", 4);
 	cp_appendData(series, "Value 2", 10);
 	cp_appendData(series, "Value 3", 6);
 
-	cp_barPlot(context, sett, series, CP_SVG);
+	cp_barPlot(context, NULL, series, CP_SVG);
 	//cp_barPlot(context, series, sett, CP_PNG);
 	cp_destroySeries(series);
 	free(sett);
@@ -61,8 +80,8 @@ Suite* barplot_suite(void){
 	Suite *s = suite_create("Bar Plot Suite");
 
 	TCase *tc_core = tcase_create("Bar Plot Test Case");
+	tcase_add_test(tc_core, test_default_hbar_plot);
 	tcase_add_test(tc_core, test_basic_hbar_plot);
-
 	suite_add_tcase(s, tc_core);
 	return s;
 }

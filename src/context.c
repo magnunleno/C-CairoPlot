@@ -50,8 +50,11 @@ CP_Context* cp_newContext(char *name, int width, int height)
 	context->surface = NULL;
 	context->cr = NULL;
 
-	context->drawAxis = true;
-	context->drawBox = true;
+	context->left_margin = 0.05;
+	context->right_margin = 0.05;
+	context->bottom_margin = 0.05;
+	context->top_margin = 0.05;
+	context->draw = CP_DRAW_BACKGOUND | CP_DRAW_BOX;
 	return context;
 }
 

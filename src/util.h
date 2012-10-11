@@ -64,6 +64,15 @@ typedef enum _CP_OBJECT_TYPE_
 	CP_POINT,
 } CP_ObjectType;
 
+typedef enum _CP_DRAWABLE_PARTS_
+{
+	CP_DRAW_BACKGOUND	= 0x00001,
+	CP_DRAW_X_AXIS		= 0x00002,
+	CP_DRAW_Y_AXIS 		= 0x00004,
+	CP_DRAW_GRID		= 0x00008,
+	CP_DRAW_BOX			= 0x00010,
+} CP_DrawableType;
+
 /******** STRUCTS ********/
 // Color structure
 typedef struct _CP_COLOR_
@@ -131,14 +140,13 @@ typedef struct _CP_CONTEXT_
 	CP_Gradient *bgGradient;
 	CP_Series *colors;
 	bool flatColors;
+	bool draw;
 
 	double left_margin;
 	double right_margin;
 	double bottom_margin;
 	double top_margin;
 
-	bool drawAxis;
-	bool drawBox;
 
 	char *fname;
 	cairo_surface_t *surface;
@@ -151,6 +159,8 @@ typedef struct _CP_BARPLOT_SETTINGS_
 	bool roundBorders;
 	double borderRadius;
 	double barPadding;
+	double horBoxPadding;
+	double verBoxPadding;
 
 	// TODO: Implement orientation;
 } CP_BarPlotSettings;
