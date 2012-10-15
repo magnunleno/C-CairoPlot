@@ -1,0 +1,8 @@
+-DDEBUG
+-I./src
+-I/usr/include/cairo
+-I/usr/include/pixman-1
+-I/usr/include/freetype2
+-I/usr/include/libpng12
+-I/usr/include/glib-2.0
+-I/usr/lib/glib-2.0/include

@@ -174,8 +174,6 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	// Draw some optional things...
 	if (ctx->draw & CP_DRAW_BACKGOUND)
 		cp_drawBackground(ctx);
-	if (ctx->draw & CP_DRAW_GRID)
-		cp_drawGrid(ctx, maxData, ctx->leftMargin, ctx->topMargin, axisWidth, axisHeight);
 
 
 	/******************
@@ -233,13 +231,6 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	// Draw some optional things...
 	if (ctx->draw & CP_DRAW_BOX)
 		cp_drawBox(ctx, x0, y0, axisWidth, axisWidth);
-	if (ctx->draw & CP_DRAW_X_AXIS)
-		cp_drawXAxis(ctx, x0, y0+axisWidth, axisWidth);
-	if (ctx->draw & CP_DRAW_Y_AXIS)
-	{
-		cp_drawYAxis(ctx, x0, y0, axisHeight);
-		cp_drawYMarks(ctx, plotX0, plotY0-(sett->barPadding/2), slot_size+sett->barPadding, series->size);
-	}
 
 	// End Cairo Environment
 	cp_endEnv(ctx, ft);

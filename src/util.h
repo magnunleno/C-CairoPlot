@@ -67,10 +67,7 @@ typedef enum _CP_OBJECT_TYPE_
 typedef enum _CP_DRAWABLE_PARTS_
 {
 	CP_DRAW_BACKGOUND	= 0x00001,
-	CP_DRAW_X_AXIS		= 0x00002,
-	CP_DRAW_Y_AXIS 		= 0x00004,
-	CP_DRAW_GRID		= 0x00008,
-	CP_DRAW_BOX			= 0x00010,
+	CP_DRAW_BOX			= 0x00002,
 } CP_DrawableType;
 
 /******** STRUCTS ********/

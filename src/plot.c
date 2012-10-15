@@ -90,41 +90,15 @@ void cp_drawBackground(CP_Context *ctx)
 	}
 
 }
-//
-// TODO: Document this
-void cp_drawXAxis(CP_Context *ctx, double x0, double y0, double x1)
-{
-	cairo_set_source_rgba(ctx->cr, 0.4, 0.4, 0.4, 1.0);
-	cairo_move_to(ctx->cr, x0, y0);
-	cairo_line_to(ctx->cr, x0+x1, y0);
-	cairo_stroke(ctx->cr);
-}
 
-// TODO: Document this
-void cp_drawYAxis(CP_Context *ctx, double x0, double y0, double y1)
-{
-	cairo_set_source_rgba(ctx->cr, 0.4, 0.4, 0.4, 1.0);
-	cairo_move_to(ctx->cr, x0, y0);
-	cairo_line_to(ctx->cr, x0, y0+y1);
-	cairo_stroke(ctx->cr);
-
-}
-
-// TODO: Document this
-void cp_drawYMarks(CP_Context *ctx, double x0, double y0, double step, int count)
-{
-	double pos;
-	double end = y0 + (count*step);
-	for (pos=y0+step; pos<=end; pos += step)
-	{
-		cairo_move_to(ctx->cr, x0-0.01, pos-(step/2));
-		cairo_line_to(ctx->cr, x0+0.01, pos-(step/2));
-		cairo_stroke(ctx->cr);
-	}
-
-}
-
-// TODO: Document this
+/*
+ * This function draws the plot box (a square around the plotting area).
+ *		ctx: CP_Context structure in which the box will bre drawn;
+ *		x0:	the starting point in the X coordinate;
+ *		y0:	the starting point in the Y coordinate;
+ *		x1:	the ending point in the X coordinate;
+ *		y1:	the ending point in the Y coordinate;
+ */
 void cp_drawBox(CP_Context *ctx, double x0, double y0, double x1, double y1)
 {
     cairo_set_line_width(ctx->cr, DEFAULT_LINE_WIDTH);
@@ -135,38 +109,6 @@ void cp_drawBox(CP_Context *ctx, double x0, double y0, double x1, double y1)
 
     cairo_set_line_width(ctx->cr, DEFAULT_LINE_WIDTH);
 }
-
-double cp_calcYStep(double maxData)
-{
-	double decimal;
-	return 0.0;
-}
-
-// TODO: Document this
-void cp_drawGrid(CP_Context *ctx, double maxData, double x0, double y0, double width, double height)
-{
-	double pos, step;
-
-	if (maxData <= 5)
-		step = 2;
-	else if (maxData <= 10)
-		step = 3;
-	else if (maxData <= 15)
-		step = 5;
-	else if (maxData <= 25)
-		step = 10;
-
-	step = step/maxData;
-
-	for (pos=x0; pos<=(x0+width); pos+=step)
-	{
-		cairo_set_source_rgba(ctx->cr, 0.75, 0.75, 0.75, 1.0);
-		cairo_move_to(ctx->cr, pos, y0);
-		cairo_line_to(ctx->cr, pos, y0+height);
-		cairo_stroke(ctx->cr);
-	}
-}
-
 
 /*
  * This function initializes any supported environment (Cairo Surface and Cairo
