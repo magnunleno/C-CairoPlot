@@ -76,6 +76,7 @@ build/libcairoplot.a: $(OBJECTS)
 $(BUILD_DIR):
 	@mkdir $(BUILD_DIR)
 	@mkdir $(BUILD_DIR)/$(TESTS_DIR)
+	@mkdir $(BUILD_DIR)/examples
 
 test_mem_leak: build/libcairoplot.so build/libcairoplot.a $(TESTS)
 	@echo -e "$(YELLOW)»»» Building all tests: $(CLR_END)$(ALLTEST_COMPILE)"

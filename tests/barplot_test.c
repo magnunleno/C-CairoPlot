@@ -32,8 +32,48 @@ START_TEST(test_default_hbar_plot)
 }END_TEST
 
 
-START_TEST(test_basic_hbar_plot){
+START_TEST(test_hbar_generic_customizations){
+	CP_Context *ctx;
+	CP_Series *series;
+
+	ctx = cp_newContext("build/examples/hbarplot_gen_cust_gradient", 400, 250);
+	ctx->flatColors = false;
+
+	series = cp_newDataSeries("Basic Bar Plot");
+	cp_appendData(series, NULL, 4);
+	cp_appendData(series, NULL, 10);
+	cp_appendData(series, NULL, 6);
+
+	cp_barPlot(ctx, NULL, series, CP_PNG);
+	cp_destroyContext(ctx);
+
+	// Custom Margins
+	ctx = cp_newContext("build/examples/hbarplot_gen_cust_margins", 400, 250);
+	ctx->leftMargin = 0.05;
+	ctx->rightMargin = 0.1;
+	ctx->bottomMargin = 0.05;
+	ctx->topMargin = 0.1;
+
+	cp_barPlot(ctx, NULL, series, CP_PNG);
+	cp_destroyContext(ctx);
+	//
+	// Custom Margins
+	ctx = cp_newContext("build/examples/hbarplot_gen_cust_margins", 400, 250);
+	ctx->leftMargin = 0.05;
+	ctx->rightMargin = 0.1;
+	ctx->bottomMargin = 0.05;
+	ctx->topMargin = 0.1;
+
+	cp_barPlot(ctx, NULL, series, CP_PNG);
+	cp_destroyContext(ctx);
+
+	// End
+	cp_destroySeries(series);
+	check_equal_null(series);
+
+
 	return;
+
 	//CP_Gradient *bgGradient;
 	CP_Context *context = cp_newContext("context_test", 400, 250);
 	//cp_setBgColorRGB(context, 120, 150, 170, 1.0);
@@ -43,10 +83,10 @@ START_TEST(test_basic_hbar_plot){
 	//bgGradient = cp_setBgGradientHSV(context, 0.0, 0.0, 0.5, 0.5, 1.0);
 	//cp_addColorStopHSV(bgGradient, 1.0, 0.0, 0.0, 0.85, 1.0);
 
-	//context->left_margin = 0.02;
-	//context->right_margin = 0.02;
-	//context->bottom_margin = 0.02;
-	//context->top_margin = 0.02;
+	//context->leftMargin = 0.02;
+	//context->rightMargin = 0.02;
+	//context->bottomMargin = 0.02;
+	//context->topMargin = 0.02;
 
 	//context->flatColors = true;
 
@@ -61,7 +101,7 @@ START_TEST(test_basic_hbar_plot){
 	//sett->barPadding = 0.01;
 	//sett->borderRadius = 0.04;
 
-	CP_Series *series = cp_newDataSeries("Basic Bar Plot");
+	series = cp_newDataSeries("Basic Bar Plot");
 	cp_appendData(series, "Value 1", 4);
 	cp_appendData(series, "Value 2", 10);
 	cp_appendData(series, "Value 3", 6);
@@ -81,7 +121,7 @@ Suite* barplot_suite(void){
 
 	TCase *tc_core = tcase_create("Bar Plot Test Case");
 	tcase_add_test(tc_core, test_default_hbar_plot);
-	tcase_add_test(tc_core, test_basic_hbar_plot);
+	tcase_add_test(tc_core, test_hbar_generic_customizations);
 	suite_add_tcase(s, tc_core);
 	return s;
 }

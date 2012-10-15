@@ -32,8 +32,8 @@
 CP_BarPlotSettings *cp_newBarPlotSettings()
 {
 	CP_BarPlotSettings *sett = cp_new(1, CP_BarPlotSettings);
-	sett->barPadding = 0.02;
 	sett->borderRadius = 0.04;
+	sett->barPadding = 0.02;
 	sett->horBoxPadding = 0.02;
 	sett->verBoxPadding = 0.02;
 	return sett;
@@ -146,20 +146,20 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	 * Graph Plotting pre-requisites *
 	 *********************************/
 	// Calculate the "plotting area"
-	plottable_width = 1 - (ctx->left_margin + ctx->right_margin + sett->horBoxPadding);
-	plottable_height = 1 - (ctx->top_margin + ctx->bottom_margin + sett->verBoxPadding);
+	plottable_width = 1 - (ctx->leftMargin + ctx->rightMargin + sett->horBoxPadding);
+	plottable_height = 1 - (ctx->topMargin + ctx->bottomMargin + sett->verBoxPadding);
 
 	// Axis points
-	axisWidth = 1 - (ctx->left_margin + ctx->right_margin);
-	axisHeight = 1 - (ctx->top_margin + ctx->bottom_margin);
+	axisWidth = 1 - (ctx->leftMargin + ctx->rightMargin);
+	axisHeight = 1 - (ctx->topMargin + ctx->bottomMargin);
 
 	// TODO: should this vary depending on the orientation?
 	// Calculates the slot size (based on how many bars will be plotted)
 	slot_size = (plottable_height/series->size) - sett->barPadding;
 
 	// Starting points
-	x0 = ctx->left_margin;
-	y0 = ctx->top_margin + (sett->barPadding/2) + (sett->verBoxPadding/2);
+	x0 = ctx->leftMargin;
+	y0 = ctx->topMargin + (sett->barPadding/2) + (sett->verBoxPadding/2);
 	plotX0 = x0;
 	plotY0 = y0;
 
@@ -175,7 +175,7 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	if (ctx->draw & CP_DRAW_BACKGOUND)
 		cp_drawBackground(ctx);
 	if (ctx->draw & CP_DRAW_GRID)
-		cp_drawGrid(ctx, maxData, ctx->left_margin, ctx->top_margin, axisWidth, axisHeight);
+		cp_drawGrid(ctx, maxData, ctx->leftMargin, ctx->topMargin, axisWidth, axisHeight);
 
 
 	/******************
@@ -224,8 +224,8 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	}
 
 	// Restore x0, y0
-	x0 = ctx->left_margin;
-	y0 = ctx->top_margin;
+	x0 = ctx->leftMargin;
+	y0 = ctx->topMargin;
 
 	/**********************
 	 * Post graph plotting *

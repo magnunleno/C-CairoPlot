@@ -142,10 +142,10 @@ typedef struct _CP_CONTEXT_
 	bool flatColors;
 	bool draw;
 
-	double left_margin;
-	double right_margin;
-	double bottom_margin;
-	double top_margin;
+	double leftMargin;
+	double rightMargin;
+	double bottomMargin;
+	double topMargin;
 
 
 	char *fname;

@@ -110,10 +110,10 @@ void test_hbar()
 
 	CP_Context *context = cp_newContext("context_test", 400, 250);
 	cp_setBgColorHSV(context, 0, 0.0, 0.85, 1.0);
-	context->left_margin = 0.02;
-	context->right_margin = 0.02;
-	context->bottom_margin = 0.02;
-	context->top_margin = 0.02;
+	context->leftMargin = 0.02;
+	context->rightMargin = 0.02;
+	context->bottomMargin = 0.02;
+	context->topMargin = 0.02;
 	context->flatColors = true;
 
 	CP_BarPlotSettings *sett = cp_newBarPlotSettings();
