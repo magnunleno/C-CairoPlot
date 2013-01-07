@@ -15,6 +15,7 @@ LINK_DIRECTORIES(${CHECK_LIBRARY_DIRS})
 ADD_DEFINITIONS(${CHECK_CFLAGS_OTHER})
 
 #ADD_DEFINITIONS(-g -O2 -fsigned-char -freg-struct-return -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline -Werror)
+ADD_DEFINITIONS(-g -O2 -fsigned-char -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline -Werror)
 
 ADD_SUBDIRECTORY(src)
 #ADD_SUBDIRECTORY(man)

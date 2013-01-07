@@ -29,7 +29,7 @@
  * it's defaults settings.
  *
  */
-CP_BarPlotSettings *cp_newBarPlotSettings()
+CP_BarPlotSettings *cp_newBarPlotSettings(void)
 {
 	CP_BarPlotSettings *sett = cp_new(1, CP_BarPlotSettings);
 	sett->borderRadius = 0.04;
@@ -99,9 +99,9 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	CP_Color *color;
 	CP_Gradient *gradient, *iter;
 	double plottable_width, plottable_height, slot_size, x0, y0;
-	double plotX0, plotY0, axisX0, axisY0;
+	//double plotX0, plotY0, axisX0, axisY0;
 	double axisWidth;
-	double axisHeight;
+	//double axisHeight;
 	double maxData;
 
 	bool destroySettings = false;
@@ -151,7 +151,7 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 
 	// Axis points
 	axisWidth = 1 - (ctx->leftMargin + ctx->rightMargin);
-	axisHeight = 1 - (ctx->topMargin + ctx->bottomMargin);
+	//axisHeight = 1 - (ctx->topMargin + ctx->bottomMargin);
 
 	// TODO: should this vary depending on the orientation?
 	// Calculates the slot size (based on how many bars will be plotted)
@@ -160,8 +160,8 @@ void cp_barPlot(CP_Context *ctx, CP_BarPlotSettings *sett, CP_Series *series, CP
 	// Starting points
 	x0 = ctx->leftMargin;
 	y0 = ctx->topMargin + (sett->barPadding/2) + (sett->verBoxPadding/2);
-	plotX0 = x0;
-	plotY0 = y0;
+	//plotX0 = x0;
+	//plotY0 = y0;
 
 	// Normalizes the data series
 	maxData = cp_maxDataSeries(series);

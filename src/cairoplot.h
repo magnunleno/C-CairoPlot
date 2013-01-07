@@ -20,6 +20,7 @@
 #ifndef _CAIROPLOT_H
 #define _CAIROPLOT_H
 
+#include <math.h>
 /* Base libraries */
 #include "util.h"
 #include "color.h"

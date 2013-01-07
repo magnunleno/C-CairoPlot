@@ -26,7 +26,7 @@
 #ifndef _CP_BARPLOT_H_
 #define _CP_BARPLOT_H_
 
-CP_BarPlotSettings *cp_newBarPlotSettings();
+CP_BarPlotSettings *cp_newBarPlotSettings(void);
 void cp_drawBar(CP_Context *ctx, CP_BarPlotSettings *sett, double x0, double y0, double width, double height);
 void cp_barPlot(CP_Context *context, CP_BarPlotSettings *sett, CP_Series *series, CP_FileType ft);
 

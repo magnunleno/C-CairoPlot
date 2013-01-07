@@ -326,7 +326,6 @@ CP_Series *cp_generateFlatColorSeries(int size)
 	int counter;
 	double step;
 	CP_Series *series;
-	CP_Color *c;
 
 	// Calculates the step (trying to get the "center" of the Hue space)
 	step = 360/(size + 1);

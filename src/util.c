@@ -84,7 +84,6 @@ CP_Object* cp_newObject(void *content, CP_ObjectType type)
  */
 void cp_destroyObject(CP_Object *obj)
 {
-	CP_Data *data;
 	switch(obj->type)
 	{
 		case CP_DATA:
