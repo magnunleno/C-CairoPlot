@@ -115,19 +115,28 @@ START_TEST(test_gradient_hsv_creation_and_iteration)
 	check_equal_null(gradient);
 }END_TEST
 
-Suite* color_suite(void)
-{
-	Suite *s = suite_create("Color Suite");
+int main(void){
+	int number_failed;
+	SRunner *sr;
+	Suite *suite;
+
+	suite = suite_create("Color Suite");
 
 	TCase *tc_core = tcase_create("Colors creation");
 	tcase_add_test(tc_core, test_color_rgb_creation);
 	tcase_add_test(tc_core, test_color_html_creation);
 	tcase_add_test(tc_core, test_color_hsv_creation);
-	suite_add_tcase(s, tc_core);
+	suite_add_tcase(suite, tc_core);
 
 	tc_core = tcase_create("Gradients creation and iteration");
 	tcase_add_test(tc_core, test_gradient_rgb_creation_and_iteration);
 	tcase_add_test(tc_core, test_gradient_hsv_creation_and_iteration);
-	suite_add_tcase(s, tc_core);
-	return s;
+	suite_add_tcase(suite, tc_core);
+
+	sr = srunner_create(suite);
+	srunner_run_all(sr, CK_NORMAL);
+
+	number_failed = srunner_ntests_failed(sr);
+	srunner_free(sr);
+	return (number_failed == 0)?0:1;
 }

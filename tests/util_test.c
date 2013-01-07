@@ -42,13 +42,21 @@ START_TEST(test_file_extention)
 	check_equal_s(filename, "/test/path/testname.png", "Extension added incorrectly. Expected '%s', received '%s'");
 }END_TEST
 
-Suite* util_suite(void)
-{
-	Suite *s = suite_create("Util Suite");
+int main(void){
+	int number_failed;
+	SRunner *sr;
+	Suite *suite;
+
+	suite = suite_create("Util Suite");
 
 	TCase *tc_core = tcase_create("Util testcase");
 	tcase_add_test(tc_core, test_file_extention);
 
-	suite_add_tcase(s, tc_core);
-	return s;
+	suite_add_tcase(suite, tc_core);
+	sr = srunner_create(suite);
+	srunner_run_all(sr, CK_NORMAL);
+
+	number_failed = srunner_ntests_failed(sr);
+	srunner_free(sr);
+	return (number_failed == 0)?0:1;
 }
