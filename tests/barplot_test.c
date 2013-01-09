@@ -116,21 +116,12 @@ START_TEST(test_hbar_generic_customizations){
 
 }END_TEST
 
-int main(void){
-	int number_failed;
-	SRunner *sr;
-	Suite *suite;
-
-	suite = suite_create("Bar Plot Suite");
+Suite* barplot_suite(void){
+	Suite *s = suite_create("barplot");
 
 	TCase *tc_core = tcase_create("Bar Plot Test Case");
 	tcase_add_test(tc_core, test_default_hbar_plot);
 	tcase_add_test(tc_core, test_hbar_generic_customizations);
-	suite_add_tcase(suite, tc_core);
-	sr = srunner_create(suite);
-	srunner_run_all(sr, CK_NORMAL);
-
-	number_failed = srunner_ntests_failed(sr);
-	srunner_free(sr);
-	return (number_failed == 0)?0:1;
+	suite_add_tcase(s, tc_core);
+	return s;
 }

@@ -188,12 +188,8 @@ START_TEST(test_series_data_max)
 
 // TODO: Add tests to verify the first and last poitner
 
-int main(void){
-	int number_failed;
-	SRunner *sr;
-	Suite *suite;
-
-	suite = suite_create("Series Test Suite");
+Suite* series_suite(void){
+	Suite *s = suite_create("series");
 
 	TCase *tc_core = tcase_create("Series Test Case");
 	tcase_add_test(tc_core, test_data_series_creation);
@@ -202,11 +198,6 @@ int main(void){
 	tcase_add_test(tc_core, test_series_index_search);
 	tcase_add_test(tc_core, test_series_data_max);
 
-	suite_add_tcase(suite, tc_core);
-	sr = srunner_create(suite);
-	srunner_run_all(sr, CK_NORMAL);
-
-	number_failed = srunner_ntests_failed(sr);
-	srunner_free(sr);
-	return (number_failed == 0)?0:1;
+	suite_add_tcase(s, tc_core);
+	return s;
 }

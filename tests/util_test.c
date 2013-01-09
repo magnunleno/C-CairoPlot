@@ -30,33 +30,25 @@ START_TEST(test_file_extention)
 	char *filename = NULL;
 
 	cp_addFileExtension(&filename, fname1, CP_SVG);
-	check_equal_s(filename, "testname.svg", "Extension added incorrectly. Expected '%s', received '%s'");
+	check_equal_s("testname.svg", filename, "Extension added incorrectly. Expected '%s', received '%s'");
 
 	cp_addFileExtension(&filename, fname1, CP_PNG);
-	check_equal_s(filename, "testname.png", "Extension added incorrectly. Expected '%s', received '%s'");
+	check_equal_s("testname.png", filename, "Extension added incorrectly. Expected '%s', received '%s'");
 
 	cp_addFileExtension(&filename, fname2, CP_SVG);
-	check_equal_s(filename, "/test/path/testname.svg", "Extension added incorrectly. Expected '%s', received '%s'");
+	check_equal_s("/test/path/testname.svg" ,filename, "Extension added incorrectly. Expected '%s', received '%s'");
 
 	cp_addFileExtension(&filename, fname2, CP_PNG);
-	check_equal_s(filename, "/test/path/testname.png", "Extension added incorrectly. Expected '%s', received '%s'");
+	check_equal_s("/test/path/testname.png", filename, "Extension added incorrectly. Expected '%s', received '%s'");
 }END_TEST
 
-int main(void){
-	int number_failed;
-	SRunner *sr;
-	Suite *suite;
-
-	suite = suite_create("Util Suite");
+Suite* util_suite(void)
+{
+	Suite *s = suite_create("util");
 
 	TCase *tc_core = tcase_create("Util testcase");
 	tcase_add_test(tc_core, test_file_extention);
 
-	suite_add_tcase(suite, tc_core);
-	sr = srunner_create(suite);
-	srunner_run_all(sr, CK_NORMAL);
-
-	number_failed = srunner_ntests_failed(sr);
-	srunner_free(sr);
-	return (number_failed == 0)?0:1;
+	suite_add_tcase(s, tc_core);
+	return s;
 }

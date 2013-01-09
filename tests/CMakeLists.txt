@@ -2,16 +2,18 @@ SET(LIBS ${LIBS} ${CAIRO_LIBRARIES} ${GLIB_LIBRARIES} ${CHECK_LIBRARIES} cairopl
 
 INCLUDE_DIRECTORIES(. ../src)
 
-set(SOURCES
-	util_test
-	data_test
-	color_test
-	series_test
-	barplot_test
+ADD_EXECUTABLE(test_cairoplot 
+	util_test.c
+	data_test.c
+	color_test.c
+	series_test.c
+	barplot_test.c
+	main_test.c
 	)
 
-FOREACH(executable ${SOURCES})
-	ADD_EXECUTABLE(${executable} ${executable}.c)
-	TARGET_LINK_LIBRARIES(${executable} ${LIBS})
-	ADD_TEST(${executable} ${CMAKE_CURRENT_BINARY_DIR}/${executable})
-ENDFOREACH()
+TARGET_LINK_LIBRARIES(test_cairoplot ${LIBS})
+ADD_TEST(Util_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "util")
+ADD_TEST(Data_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "data")
+ADD_TEST(Color_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "color")
+ADD_TEST(Series_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "series")
+ADD_TEST(Barplot_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "barplot")
