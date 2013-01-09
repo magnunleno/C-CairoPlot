@@ -11,7 +11,10 @@ ADD_EXECUTABLE(test_cairoplot
 	main_test.c
 	)
 
-TARGET_LINK_LIBRARIES(test_cairoplot ${LIBS})
+#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lmmmm")
+
+TARGET_LINK_LIBRARIES(test_cairoplot ${LIBS} "-lm")
+
 ADD_TEST(Util_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "util")
 ADD_TEST(Data_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "data")
 ADD_TEST(Color_Suite ${CMAKE_CURRENT_BINARY_DIR}/test_cairoplot "color")

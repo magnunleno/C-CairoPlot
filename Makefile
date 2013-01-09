@@ -22,6 +22,11 @@ build:
 	@cd build && cmake ../ 
 	@cd build && make
 
+build-v:
+	@mkdir build
+	@cd build && cmake ../ 
+	@cd build && VERBOSE=1 make
+
 install: build
 	@cd build && make install
 
@@ -29,7 +34,7 @@ uninstall: build
 	@cd build && make uninstall
 
 check: build
-	@cd build && CTEST_OUTPUT_ON_FAILURE=true make test
+	@cd build && CTEST_OUTPUT_ON_FAILURE=true make -d test
 
 clean: 
 	@rm -rf build
