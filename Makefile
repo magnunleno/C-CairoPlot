@@ -34,7 +34,7 @@ uninstall: build
 	@cd build && make uninstall
 
 check: build
-	@cd build && CTEST_OUTPUT_ON_FAILURE=true make -d test
+	@cd build && CTEST_OUTPUT_ON_FAILURE=true make test
 
 clean: 
 	@rm -rf build

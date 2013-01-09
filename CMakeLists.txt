@@ -1,8 +1,20 @@
+# CMake file for building CairoPlot
+
+# CMake compatibility issues: don't modify this, please!
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-ENABLE_TESTING()
+MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 FIND_PACKAGE(PkgConfig REQUIRED)
+ENABLE_TESTING()
+
+# allow more human readable "if then else" constructs
+SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
 PROJECT(cairoplot C)
+
+# project version
+SET(CP_MAJOR_VERSION 0)
+SET(CP_MINOR_VERSION 1)
+SET(CP_PATCH_LEVEL 0)
 
 PKG_CHECK_MODULES(CAIRO REQUIRED cairo)
 INCLUDE_DIRECTORIES(${CAIRO_INCLUDE_DIRS})
@@ -21,9 +33,9 @@ ADD_SUBDIRECTORY(src)
 #ADD_SUBDIRECTORY(man)
 IF(CHECK_FOUND)
 	ADD_SUBDIRECTORY(tests)
-ELSE(CHECK_FOUND)
+ELSE()
 	message("*** LIBRARY CHECK NOT FOUND")
-ENDIF(CHECK_FOUND)
+ENDIF()
 
 # uninstall target
 configure_file(

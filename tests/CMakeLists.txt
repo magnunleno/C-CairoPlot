@@ -2,7 +2,7 @@ SET(LIBS ${LIBS} ${CAIRO_LIBRARIES} ${GLIB_LIBRARIES} ${CHECK_LIBRARIES} cairopl
 
 INCLUDE_DIRECTORIES(. ../src)
 
-ADD_EXECUTABLE(test_cairoplot 
+ADD_EXECUTABLE(test_cairoplot
 	util_test.c
 	data_test.c
 	color_test.c
@@ -10,8 +10,6 @@ ADD_EXECUTABLE(test_cairoplot
 	barplot_test.c
 	main_test.c
 	)
-
-#set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -lmmmm")
 
 TARGET_LINK_LIBRARIES(test_cairoplot ${LIBS} "-lm")
 
