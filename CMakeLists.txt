@@ -4,7 +4,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 MARK_AS_ADVANCED(CMAKE_BACKWARDS_COMPATIBILITY)
 FIND_PACKAGE(PkgConfig REQUIRED)
-ENABLE_TESTING()
 
 # allow more human readable "if then else" constructs
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
@@ -21,20 +20,23 @@ INCLUDE_DIRECTORIES(${CAIRO_INCLUDE_DIRS})
 LINK_DIRECTORIES(${CAIRO_LIBRARY_DIRS})
 ADD_DEFINITIONS(${CAIRO_CFLAGS_OTHER})
 
-PKG_CHECK_MODULES(CHECK check)
+PKG_CHECK_MODULES(CHECK check>=0.9.9)
 INCLUDE_DIRECTORIES(${CHECK_INCLUDE_DIRS})
 LINK_DIRECTORIES(${CHECK_LIBRARY_DIRS})
 ADD_DEFINITIONS(${CHECK_CFLAGS_OTHER})
 
 #ADD_DEFINITIONS(-g -O2 -fsigned-char -freg-struct-return -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline -Werror)
-ADD_DEFINITIONS(-g -O2 -fsigned-char -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline -Werror)
+ADD_DEFINITIONS(-g -O2 -fsigned-char -Wall -W -Wshadow -Wstrict-prototypes -Wpointer-arith -Wcast-qual -Winline )
 
 ADD_SUBDIRECTORY(src)
 #ADD_SUBDIRECTORY(man)
 IF(CHECK_FOUND)
+	ENABLE_TESTING()
 	ADD_SUBDIRECTORY(tests)
 ELSE()
 	message("*** LIBRARY CHECK NOT FOUND")
+	ADD_CUSTOM_TARGET(test 
+		COMMAND echo -e ' *** ERROR: The test suite requires check 0.9.9 or greater.\\n')
 ENDIF()
 
 # uninstall target

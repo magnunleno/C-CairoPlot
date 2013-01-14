@@ -19,7 +19,6 @@
  */
 
 #include <stdio.h>
-#include <glib.h>
 #include <check.h>
 
 #include "util_test.h"
